@@ -18,6 +18,9 @@ const Header = () => {
       <li>
         <NavLink to="/all-Requests">All Requests</NavLink>
       </li>
+      <li>
+        <NavLink to="/requestAsset">Request Asset </NavLink>
+      </li>
     </>
   );
   return (

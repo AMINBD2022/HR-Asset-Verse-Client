@@ -1,21 +1,57 @@
 import React from "react";
 import { Link } from "react-router";
+import useAuth from "../../../hooks/useAuth";
+import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 
 const Login = () => {
+  const { loginUser, setUser } = useAuth();
+  const { register, handleSubmit } = useForm();
+  const handleLogIn = (data) => {
+    console.log(data);
+
+    loginUser(data.email, data.password)
+      .then((data) => {
+        setUser(data.user);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Registation successfull",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
-    <div className="hero bg-base-200 min-h-screen">
-      <div className="hero-content w-full flex-col lg:flex-row-reverse">
-        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+    <div className="hero min-h-screen bg-base-200">
+      <div className="hero-content w-full flex-col">
+        <div className="card bg-base-100 w-full max-w-lg shadow-xl">
           <div className="card-body">
             <h2 className="text-3xl">Sign in to your account</h2>
-            <fieldset className="fieldset">
-              <label className="label">Email</label>
-              <input type="email" className="input" placeholder="Email" />
-              <label className="label">Password</label>
-              <input type="password" className="input" placeholder="Password" />
-              <span>Forgot your password?</span>
-              <button className="btn btn-secondary mt-4">Sign In</button>
-            </fieldset>
+            <form onSubmit={handleSubmit(handleLogIn)}>
+              {" "}
+              <fieldset className="fieldset">
+                <label className="label">Email</label>
+                <input
+                  {...register("email")}
+                  type="email"
+                  className="input w-full"
+                  placeholder="Email"
+                />
+                <label className="label">Password</label>
+                <input
+                  {...register("password")}
+                  type="password"
+                  className="input w-full"
+                  placeholder="Password"
+                />
+                <span>Forgot your password?</span>
+                <button className="btn btn-secondary mt-4">Sign In</button>
+              </fieldset>
+            </form>
 
             <div className="divider">Or</div>
             {/* Google */}

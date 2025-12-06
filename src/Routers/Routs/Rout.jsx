@@ -6,6 +6,7 @@ import AuthLayout from "../../LayOuts/AuthLayouts/AuthLayout";
 import Register from "../../Pages/RegisterPage/Register";
 import AllRequests from "../../Pages/AllRequests/AllRequests";
 import UpgradePackage from "../../Pages/Upgrade-Package/UpgradePackage";
+import RequestAsset from "../../Pages/RequestAsset/RequestAsset";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/upgrade-Package",
         element: <UpgradePackage />,
+      },
+      {
+        path: "/requestAsset",
+        element: <RequestAsset />,
       },
     ],
   },

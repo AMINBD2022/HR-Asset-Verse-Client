@@ -1,7 +1,8 @@
 import React from "react";
+import Packages from "../../Components/Packages";
 
 const UpgradePackage = () => {
-  return <div>Upgrade Package</div>;
+  return <Packages />;
 };
 
 export default UpgradePackage;

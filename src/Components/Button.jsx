@@ -1,15 +1,46 @@
 import React from "react";
 import { Link } from "react-router";
 import styled from "styled-components";
+import useAuth from "../hooks/useAuth";
+import Swal from "sweetalert2";
+import Loading from "./Loading";
 
 const Button = () => {
+  const { user, logOutUser, isLoading } = useAuth();
+  const handleLogOut = () => {
+    logOutUser()
+      .then(() => {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Log Out successfull",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <StyledWrapper>
-      <button data-label="Register" className="rainbow-hover">
-        <Link to="/auth" className="sp">
-          Register
-        </Link>
-      </button>
+      {isLoading ? (
+        <Loading />
+      ) : user ? (
+        <button
+          onClick={handleLogOut}
+          data-label="Register"
+          className="rainbow-hover"
+        >
+          <span to="/auth" className="sp">
+            Log Out
+          </span>
+        </button>
+      ) : (
+        <button data-label="Register" className="rainbow-hover">
+          <Link to="/auth" className="sp">
+            Register
+          </Link>
+        </button>
+      )}
     </StyledWrapper>
   );
 };
