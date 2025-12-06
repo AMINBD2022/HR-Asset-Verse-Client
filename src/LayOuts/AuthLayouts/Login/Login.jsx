@@ -1,12 +1,16 @@
-import React from "react";
-import { Link } from "react-router";
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const Login = () => {
+  const [show, setShow] = useState(false);
   const { loginUser, setUser } = useAuth();
   const { register, handleSubmit } = useForm();
+  const navigate = useNavigate();
+  const location = useLocation();
   const handleLogIn = (data) => {
     console.log(data);
 
@@ -20,6 +24,7 @@ const Login = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        navigate(location.state || "/");
       })
       .catch((err) => {
         console.log(err);
@@ -41,13 +46,21 @@ const Login = () => {
                   className="input w-full"
                   placeholder="Email"
                 />
-                <label className="label">Password</label>
-                <input
-                  {...register("password")}
-                  type="password"
-                  className="input w-full"
-                  placeholder="Password"
-                />
+                <div className="relative">
+                  <label className="label">Password</label>
+                  <input
+                    {...register("password")}
+                    type={show ? "text" : "password"}
+                    className="input w-full"
+                    placeholder="Password"
+                  />
+                  <span
+                    onClick={() => setShow(!show)}
+                    className="absolute top-2/5 translate-y-1/2 right-6 cursor-pointer z-10"
+                  >
+                    {show ? <IoEyeOutline /> : <IoEyeOffOutline />}
+                  </span>
+                </div>
                 <span>Forgot your password?</span>
                 <button className="btn btn-secondary mt-4">Sign In</button>
               </fieldset>

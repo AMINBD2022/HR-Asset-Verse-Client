@@ -7,6 +7,8 @@ import Register from "../../Pages/RegisterPage/Register";
 import AllRequests from "../../Pages/AllRequests/AllRequests";
 import UpgradePackage from "../../Pages/Upgrade-Package/UpgradePackage";
 import RequestAsset from "../../Pages/RequestAsset/RequestAsset";
+import PrivateRoute from "../PrivateRouts/PrivateRoute";
+import ErrorPage from "../../Pages/ErrorPage/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +30,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/requestAsset",
-        element: <RequestAsset />,
+        element: (
+          <PrivateRoute>
+            <RequestAsset />
+          </PrivateRoute>
+        ),
       },
     ],
   },
@@ -45,6 +51,10 @@ const router = createBrowserRouter([
         element: <Login />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <ErrorPage />,
   },
 ]);
 
