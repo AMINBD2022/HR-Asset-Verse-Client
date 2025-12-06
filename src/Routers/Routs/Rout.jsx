@@ -4,12 +4,28 @@ import Home from "../../Pages/HomePage/Home";
 import Login from "../../LayOuts/AuthLayouts/Login/Login";
 import AuthLayout from "../../LayOuts/AuthLayouts/AuthLayout";
 import Register from "../../Pages/RegisterPage/Register";
+import AllRequests from "../../Pages/AllRequests/AllRequests";
+import UpgradePackage from "../../Pages/Upgrade-Package/UpgradePackage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
-    children: [{ index: true, element: <Home /> }],
+    children: [
+      { index: true, element: <Home /> },
+      {
+        path: "/all-Requests",
+        element: <AllRequests />,
+      },
+      {
+        path: "/add-Asset",
+        element: <AllRequests />,
+      },
+      {
+        path: "/upgrade-Package",
+        element: <UpgradePackage />,
+      },
+    ],
   },
   {
     path: "/auth",

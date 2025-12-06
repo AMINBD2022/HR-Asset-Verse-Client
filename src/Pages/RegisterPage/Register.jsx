@@ -1,22 +1,46 @@
-import React from "react";
+import { useState } from "react";
+
+import HrAdminRegisterForm from "../../Components/HrAdminRegisterForm";
+import EmployeeForm from "../../Components/EmployeeForm";
 import { Link } from "react-router";
 
 const Register = () => {
+  const [tab, setTab] = useState("employee");
   return (
-    <div className="hero bg-base-200 min-h-screen">
-      <div className="hero-content w-full flex-col lg:flex-row-reverse">
-        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+    <div className="hero min-h-screen bg-base-200">
+      <div className="hero-content w-full flex-col">
+        <div className="card bg-base-100 w-full max-w-lg shadow-xl">
           <div className="card-body">
-            <fieldset className="fieldset">
-              <label className="label">Email</label>
-              <input type="email" className="input" placeholder="Email" />
-              <label className="label">Password</label>
-              <input type="password" className="input" placeholder="Password" />
-              <button className="btn btn-neutral mt-4">Register</button>
-            </fieldset>
-            <p>
-              Already have an acount ?{" "}
-              <Link to="login" className="text-blue-600">
+            <h2 className="text-4xl font-bold text-center">Create Account</h2>
+            <p className="text-sm mb-4 text-center">Choose your account type</p>
+
+            {/* Tabs */}
+            <div role="tablist" className="tabs">
+              <button
+                role="tab"
+                className={`tab ${tab === "hr" ? "tab-active" : ""}`}
+                onClick={() => setTab("hr")}
+              >
+                HR Manager
+              </button>
+
+              <button
+                role="tab"
+                className={`tab ${tab === "employee" ? "tab-active" : ""}`}
+                onClick={() => setTab("employee")}
+              >
+                Employee
+              </button>
+            </div>
+
+            {/* Register and Emplyee Forms */}
+            <div className="mt-4">
+              {tab === "hr" ? <HrAdminRegisterForm /> : <EmployeeForm />}
+            </div>
+
+            <p className="mt-4 text-center">
+              Already have an account?{" "}
+              <Link to="login" className="text-blue-700">
                 Login
               </Link>
             </p>
