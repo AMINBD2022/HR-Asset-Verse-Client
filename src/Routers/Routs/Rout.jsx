@@ -9,6 +9,13 @@ import UpgradePackage from "../../Pages/Upgrade-Package/UpgradePackage";
 import RequestAsset from "../../Pages/RequestAsset/RequestAsset";
 import PrivateRoute from "../PrivateRouts/PrivateRoute";
 import ErrorPage from "../../Pages/ErrorPage/ErrorPage";
+import AddAsset from "../../Pages/AddAsset/AddAsset";
+import MyEmployeeList from "../../Pages/MyEmployyList/MyEmployeeList";
+import AllAsset from "../../Pages/AssetListPage/AllAsset";
+import MyAsset from "../../Pages/My-Assets/MyAsset";
+import MyTeam from "../../Pages/MyTeam/MyTeam";
+import EmployeeForm from "../../Components/EmployeeForm";
+import EmployeeProfile from "../../Pages/EmployeeProfile/EmployeeProfile";
 
 const router = createBrowserRouter([
   {
@@ -21,10 +28,6 @@ const router = createBrowserRouter([
         element: <AllRequests />,
       },
       {
-        path: "/add-Asset",
-        element: <AllRequests />,
-      },
-      {
         path: "/upgrade-Package",
         element: (
           <PrivateRoute>
@@ -33,10 +36,60 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/requestAsset",
+        path: "/add-Asset",
+        element: (
+          <PrivateRoute>
+            <AddAsset />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/my-employee-List",
+        element: (
+          <PrivateRoute>
+            <MyEmployeeList />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/asset-List",
+        element: (
+          <PrivateRoute>
+            <AllAsset />
+          </PrivateRoute>
+        ),
+      },
+
+      // Employee Link ------------------------
+      {
+        path: "/my-asset",
+        element: (
+          <PrivateRoute>
+            <MyAsset />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/request-Asset",
         element: (
           <PrivateRoute>
             <RequestAsset />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/my-Team",
+        element: (
+          <PrivateRoute>
+            <MyTeam />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/employee-Profile",
+        element: (
+          <PrivateRoute>
+            <EmployeeProfile />
           </PrivateRoute>
         ),
       },

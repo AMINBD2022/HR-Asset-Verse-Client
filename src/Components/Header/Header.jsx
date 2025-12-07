@@ -37,10 +37,10 @@ const Header = () => {
             <NavLink to="/all-Requests">All Requests</NavLink>
           </li>
           <li>
-            <NavLink to="/add-Asset">My Employee List</NavLink>
+            <NavLink to="/my-employee-List">My Employee List</NavLink>
           </li>
           <li>
-            <NavLink to="/add-Asset">Asset List</NavLink>
+            <NavLink to="/asset-List">All Asset List</NavLink>
           </li>
           <li>
             <NavLink to="/add-Asset">Add Asset</NavLink>
@@ -53,16 +53,16 @@ const Header = () => {
       {role === "employee" && (
         <>
           <li>
-            <NavLink to="/all-Requests">My Team</NavLink>
+            <NavLink to="/my-Team">My Team</NavLink>
           </li>
           <li>
-            <NavLink to="/requestAsset">Request an Asset </NavLink>
+            <NavLink to="/request-Asset">Request an Asset </NavLink>
           </li>
           <li>
-            <NavLink to="/requestAsset">My Assets</NavLink>
+            <NavLink to="/my-asset">My Assets</NavLink>
           </li>
           <li>
-            <NavLink to="/requestAsset">Profile</NavLink>
+            <NavLink to="/employee-Profile">Employee Profile</NavLink>
           </li>
         </>
       )}
