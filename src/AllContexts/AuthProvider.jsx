@@ -5,6 +5,7 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase/fitebase.config";
 
@@ -22,6 +23,10 @@ const AuthProvider = ({ children }) => {
   const loginUser = (email, password) => {
     setisLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const updateUserProfile = (updateProfileId) => {
+    return updateProfile(auth.currentUser, updateProfileId);
   };
   const logOutUser = () => {
     setisLoading(true);
@@ -42,6 +47,7 @@ const AuthProvider = ({ children }) => {
   const authInfo = {
     registerUser,
     loginUser,
+    updateUserProfile,
     logOutUser,
     user,
     setUser,

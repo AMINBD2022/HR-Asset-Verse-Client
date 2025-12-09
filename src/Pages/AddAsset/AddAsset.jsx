@@ -6,6 +6,7 @@ import useAuth from "../../hooks/useAuth";
 
 const AddAsset = () => {
   const { user } = useAuth();
+  console.log(user);
 
   const { register, handleSubmit } = useForm();
 
@@ -74,10 +75,10 @@ const AddAsset = () => {
           />
         </div>
 
-        {/* Logo  */}
+        {/* Asset Logo Image  */}
 
         <div>
-          <label className="label">Company Logo</label>
+          <label className="label">Product Image</label>
           <input
             {...register("file")}
             type="file"
@@ -106,17 +107,6 @@ const AddAsset = () => {
             min="1"
             className="input w-full"
             placeholder="Quantity..."
-          />
-        </div>
-
-        {/* Brand */}
-        <div>
-          <label className="label">Brand</label>
-          <input
-            {...register("brand")}
-            type="text"
-            placeholder="Dell, HP, IKEA..."
-            className="input w-full"
           />
         </div>
         {/* Submit Button */}

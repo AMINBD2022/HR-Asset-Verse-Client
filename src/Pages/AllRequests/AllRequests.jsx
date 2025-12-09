@@ -46,7 +46,12 @@ const AllRequests = () => {
       assetId: req.assetId,
       assetName: req.assetName,
       requesterEmail: req.requesterEmail,
-      requestedQuantity: req.requestedQuantity,
+      assetImage: req.assetImage,
+      assetType: req.assetType,
+      employeeEmail: req.requesterEmail,
+      employeeName: req.requesterName,
+      hrEmail: req.hrEmail,
+      companyName: req.companyName,
     };
 
     const res = await axios.post(

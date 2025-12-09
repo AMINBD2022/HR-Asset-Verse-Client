@@ -5,15 +5,17 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import useAuth from "../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
+import { auth } from "../firebase/fitebase.config";
 
 const EmployeeForm = () => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { registerUser, setUser } = useAuth();
+  const { registerUser, setUser, updateUserProfile } = useAuth();
 
   const { register, handleSubmit } = useForm();
   const handleRegistation = (data) => {
+    const name = data.name;
     console.log(data);
     const newUser = {
       name: data.name,
@@ -29,15 +31,20 @@ const EmployeeForm = () => {
         axios.post("http://localhost:5000/users", newUser).then((res) => {
           console.log(res.data);
           if (res.data.insertedId) {
-            setUser(firebaseUser);
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Registation successfull",
-              showConfirmButton: false,
-              timer: 1500,
+            updateUserProfile({
+              displayName: name,
+            }).then(() => {
+              setUser({ ...firebaseUser, displayName: name });
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Registation successfull",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+
+              navigate(location.state || "/");
             });
-            navigate(location.state || "/");
           }
         });
       })

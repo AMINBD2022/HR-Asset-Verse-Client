@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 
 const RequestAsset = () => {
   const { user } = useAuth();
+  console.log(user);
 
   const { register, handleSubmit } = useForm();
 
@@ -31,45 +32,24 @@ const RequestAsset = () => {
       });
     }
 
-    const requestedQty = Number(data.quantity);
-
-    if (requestedQty < 1) {
-      return Swal.fire({
-        icon: "error",
-        title: "Quantity should be at least 1",
-      });
-    }
-
-    if (requestedQty > selectedAsset.availableQuantity) {
-      return Swal.fire({
-        icon: "error",
-        title: "Not enough stock available",
-      });
-    }
-
-    //  request data
+    //  request data ------------------
     const requestAssetData = {
       assetId: selectedAsset._id,
       assetName: selectedAsset.productName,
+      assetImage: selectedAsset.productImage,
       assetType: selectedAsset.productType,
-
       requesterName: user?.displayName,
       requesterEmail: user?.email,
-
       hrEmail: selectedAsset.hrEmail,
       companyName: selectedAsset.companyName,
-
+      requestStatus: "pending",
       requestDate: new Date(),
       approvalDate: null,
-      requestStatus: "pending",
-
-      note: data.note,
       processedBy: null,
-
-      requestedQuantity: requestedQty,
+      note: data.note,
     };
 
-    // Submit request
+    // Submit request-----------
     axios
       .post("http://localhost:5000/requestAsset", requestAssetData)
       .then((res) => {
@@ -112,19 +92,6 @@ const RequestAsset = () => {
                     ))}
                   </select>
                 </div>
-
-                {/* Quantity */}
-                <div>
-                  <label className="font-medium">Quantity</label>
-                  <input
-                    type="number"
-                    className="input w-full"
-                    min="1"
-                    {...register("quantity")}
-                    placeholder="Quantity"
-                  />
-                </div>
-
                 <div>
                   <label className="font-medium">Note/Reason</label>
                   <textarea
