@@ -19,6 +19,7 @@ import EmployeeProfile from "../../Pages/EmployeeProfile/EmployeeProfile";
 import HrProfile from "../../Pages/HrProfile/HrProfile";
 import AssignedAssets from "../../Pages/AssignedAssets/AssignedAssets";
 import AdminRoute from "../AdminRoutes/AdminRoute";
+import EmployeeRoute from "../EmployeeRoute/EmployeeRoute";
 
 const router = createBrowserRouter([
   {
@@ -33,9 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/upgrade-Package",
         element: (
-          <PrivateRoute>
+          <AdminRoute>
+            {" "}
             <UpgradePackage />
-          </PrivateRoute>
+          </AdminRoute>
         ),
       },
       {
@@ -49,9 +51,10 @@ const router = createBrowserRouter([
       {
         path: "/my-employee-List",
         element: (
-          <PrivateRoute>
+          <AdminRoute>
+            {" "}
             <MyEmployeeList />
-          </PrivateRoute>
+          </AdminRoute>
         ),
       },
       {
@@ -65,9 +68,9 @@ const router = createBrowserRouter([
       {
         path: "/hrProfile",
         element: (
-          <PrivateRoute>
+          <AdminRoute>
             <HrProfile />
-          </PrivateRoute>
+          </AdminRoute>
         ),
       },
 
@@ -75,33 +78,34 @@ const router = createBrowserRouter([
       {
         path: "/my-asset",
         element: (
-          <PrivateRoute>
+          <EmployeeRoute>
             <AssignedAssets />
-          </PrivateRoute>
+          </EmployeeRoute>
         ),
       },
       {
         path: "/request-Asset",
         element: (
-          <PrivateRoute>
+          <EmployeeRoute>
             <RequestAsset />
-          </PrivateRoute>
+          </EmployeeRoute>
         ),
       },
       {
         path: "/my-Team",
         element: (
-          <PrivateRoute>
+          <EmployeeRoute>
             <MyTeam />
-          </PrivateRoute>
+          </EmployeeRoute>
         ),
       },
       {
         path: "/employee-Profile",
         element: (
-          <PrivateRoute>
+          <EmployeeRoute>
+            {" "}
             <EmployeeProfile />
-          </PrivateRoute>
+          </EmployeeRoute>
         ),
       },
     ],
