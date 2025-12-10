@@ -3,16 +3,17 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
+import useAxios from "../../hooks/useAxios";
 
 const AddAsset = () => {
+  const axiosURL = useAxios();
   const { user } = useAuth();
-  console.log(user);
 
   const { register, handleSubmit } = useForm();
 
   const handleAsset = async (data) => {
-    const { companyName } = await axios
-      .get(`http://localhost:5000/users/${user.email}`)
+    const { companyName } = await axiosURL
+      .get(`/users/${user.email}`)
       .then((res) => {
         console.log(res.data);
         return res.data;

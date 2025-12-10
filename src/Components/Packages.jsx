@@ -1,44 +1,17 @@
 import React from "react";
-
-const packages = [
-  {
-    name: "Basic",
-    employeeLimit: 5,
-    price: 5,
-    features: ["Asset Tracking", "Employee Management", "Basic Support"],
-  },
-  {
-    name: "Standard",
-    employeeLimit: 10,
-    price: 8,
-    features: [
-      "Asset Tracking",
-      "Employee Management",
-      "Basic Support",
-      "All Basic features",
-      "Advanced Analytics",
-      "Priority Support",
-    ],
-  },
-  {
-    name: "Premium",
-    employeeLimit: 20,
-    price: 15,
-    features: [
-      "Asset Tracking",
-      "Employee Management",
-      "Basic Support",
-      "All Basic features",
-      "Advanced Analytics",
-      "Priority Support",
-      "All Standard features",
-      "Custom Branding",
-      "24/7 Support",
-    ],
-  },
-];
+import useAxios from "../hooks/useAxios";
+import { useQuery } from "@tanstack/react-query";
 
 const Packages = () => {
+  const axiosURL = useAxios();
+
+  const { data: packages = [] } = useQuery({
+    queryKey: ["packages"],
+    queryFn: async () => {
+      const res = await axiosURL.get("/packages");
+      return res.data;
+    },
+  });
   return (
     <div className="grid md:grid-cols-3 gap-6 p-6 w-11/12 mx-auto">
       {packages.map((pkg) => (

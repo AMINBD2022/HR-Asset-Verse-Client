@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import React from "react";
+import useAxios from "../../hooks/useAxios";
 
 const AllAsset = () => {
+  const axiosURL = useAxios();
   const {
     data: assets = [],
     isLoading,
@@ -10,7 +11,7 @@ const AllAsset = () => {
   } = useQuery({
     queryKey: ["assets"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:5000/assets");
+      const res = await axiosURL.get("/assets");
       return res.data;
     },
   });
