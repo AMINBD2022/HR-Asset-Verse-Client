@@ -20,6 +20,7 @@ import HrProfile from "../../Pages/HrProfile/HrProfile";
 import AssignedAssets from "../../Pages/AssignedAssets/AssignedAssets";
 import AdminRoute from "../AdminRoutes/AdminRoute";
 import EmployeeRoute from "../EmployeeRoute/EmployeeRoute";
+import HrAdminRegisterForm from "../../Components/HrAdminRegisterForm";
 
 const router = createBrowserRouter([
   {
@@ -118,6 +119,7 @@ const router = createBrowserRouter([
         index: true,
         element: <Register />,
       },
+
       {
         path: "login",
         element: <Login />,

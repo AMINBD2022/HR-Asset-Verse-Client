@@ -6,7 +6,6 @@ import { Navigate } from "react-router";
 const EmployeeRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const axiosURL = useAxios();
-
   const { data: userInfo, isLoading } = useQuery({
     queryKey: ["userRole", user?.email],
     queryFn: async () => {
@@ -15,16 +14,18 @@ const EmployeeRoute = ({ children }) => {
     },
   });
 
-  if (loading) {
+  if (loading || isLoading) {
     return <p>Loading...</p>;
-  }
-  if (isLoading) {
-    return <p>Checking permission...</p>;
   }
 
   if (!user) {
     return <Navigate to="/auth/login" />;
   }
+
+  if (isLoading) {
+    return <p>Checking permission...</p>;
+  }
+
   if (userInfo.role !== "employee") {
     return <Navigate to="/" />;
   }
