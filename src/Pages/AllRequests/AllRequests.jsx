@@ -1,9 +1,10 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import Swal from "sweetalert2";
+import useAxios from "../../hooks/useAxios";
 
 const AllRequests = () => {
+  const axiosURL = useAxios();
   const {
     data: requests = [],
     isLoading,
@@ -11,7 +12,7 @@ const AllRequests = () => {
   } = useQuery({
     queryKey: ["requestAsset"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:5000/requestAsset");
+      const res = await axiosURL.get("/requestAsset");
       return res.data;
     },
   });
@@ -29,9 +30,7 @@ const AllRequests = () => {
       cancelButtonText: "Cancel",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await axios.delete(
-          `http://localhost:5000/requestAsset/${req._id}`
-        );
+        const res = await axiosURL.delete(`/requestAsset/${req._id}`);
 
         if (res.data.deletedCount > 0) {
           Swal.fire("Deleted!", "Request removed successfully", "success");
@@ -54,10 +53,7 @@ const AllRequests = () => {
       companyName: req.companyName,
     };
 
-    const res = await axios.post(
-      `http://localhost:5000/approveRequest/${req._id}`,
-      assignedData
-    );
+    const res = await axiosURL.post(`/approveRequest/${req._id}`, assignedData);
     if (res.data.success) {
       Swal.fire("Approved!", "Request approved successfully", "success");
       refetch();

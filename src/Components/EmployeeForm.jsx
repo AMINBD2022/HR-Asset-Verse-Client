@@ -4,12 +4,13 @@ import Swal from "sweetalert2";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import useAuth from "../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router";
-import axios from "axios";
+import useAxios from "../hooks/useAxios";
 
 const EmployeeForm = () => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const axiosURL = useAxios();
   const { registerUser, setUser, updateUserProfile } = useAuth();
 
   const { register, handleSubmit } = useForm();
@@ -24,15 +25,15 @@ const EmployeeForm = () => {
       role: "employee",
       createdAt: new Date().toLocaleString(),
     };
-    registerUser(data.email, data.password)
-      .then((data) => {
-        const firebaseUser = data.user;
-        axios.post("http://localhost:5000/users", newUser).then((res) => {
-          console.log(res.data);
-          if (res.data.insertedId) {
-            updateUserProfile({
-              displayName: name,
-            }).then(() => {
+    registerUser(data.email, data.password).then((data) => {
+      const firebaseUser = data.user;
+      axiosURL.post("/users", newUser).then((res) => {
+        console.log(res.data);
+        if (res.data.insertedId) {
+          updateUserProfile({
+            displayName: name,
+          })
+            .then(() => {
               setUser({ ...firebaseUser, displayName: name });
               Swal.fire({
                 position: "center",
@@ -43,11 +44,11 @@ const EmployeeForm = () => {
               });
 
               navigate(location.state || "/");
-            });
-          }
-        });
-      })
-      .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+        }
+      });
+    });
   };
 
   return (

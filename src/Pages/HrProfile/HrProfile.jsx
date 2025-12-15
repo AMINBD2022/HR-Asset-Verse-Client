@@ -4,6 +4,8 @@ import useAxios from "../../hooks/useAxios";
 
 const HrProfile = () => {
   const { user, loading } = useAuth();
+  console.log(user);
+
   const axiosURL = useAxios();
   console.log(user);
 
@@ -59,8 +61,8 @@ const HrProfile = () => {
               {hrData?.phone || "Not Provided"}
             </p>
             <p className="text-gray-600">
-              <span className="font-semibold">Joined At:</span>{" "}
-              {hrData?.joinedDate || "Not Available"}
+              <span className="font-semibold">Joined At:</span>
+              {hrData?.createdAt || "No Date Found"}
             </p>
           </div>
         </div>

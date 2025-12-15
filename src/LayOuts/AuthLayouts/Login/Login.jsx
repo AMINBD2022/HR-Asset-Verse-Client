@@ -99,7 +99,7 @@ const Login = () => {
 
             <p>
               Dont have an account?{" "}
-              <Link className="text-blue-600" to="/auth/register">
+              <Link className="text-blue-600" to="/register">
                 Register
               </Link>
             </p>

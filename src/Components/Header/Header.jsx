@@ -128,7 +128,7 @@ const Header = () => {
         </div>
         <div className="navbar-end">
           {!user ? (
-            <NavLink to="/auth/login" className="btn btn-primary">
+            <NavLink to="/login" className="btn btn-primary">
               Login
             </NavLink>
           ) : (

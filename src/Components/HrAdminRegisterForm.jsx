@@ -12,8 +12,10 @@ const HrAdminRegisterForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { register, handleSubmit } = useForm();
+
   const handleRegistation = async (data) => {
     // Upload to ImgBB
+    const name = data.name;
 
     const imageFile = data.file[0];
     const formData = new FormData();
@@ -43,9 +45,9 @@ const HrAdminRegisterForm = () => {
           console.log(res.data);
           if (res.data.insertedId) {
             updateUserProfile({
-              displayName: data.name,
+              displayName: name,
             }).then(() => {
-              setUser({ ...firebaseUser, displayName: data.name });
+              setUser({ ...firebaseUser, displayName: name });
               Swal.fire({
                 position: "center",
                 icon: "success",

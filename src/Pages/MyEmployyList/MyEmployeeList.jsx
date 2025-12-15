@@ -1,18 +1,20 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../hooks/useAxios";
+import useAuth from "../../hooks/useAuth";
 
 const MyEmployeeList = () => {
   const axiosURL = useAxios();
+  const { user } = useAuth();
 
   const {
     data: Myemployees = [],
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["employeeList"],
+    queryKey: ["employeeList", user.email],
     queryFn: async () => {
-      const res = await axiosURL.get("/myEmployeeList");
+      const res = await axiosURL.get(`/myEmployeeList?hrEmail=${user?.email}`);
       return res.data;
     },
   });
@@ -52,7 +54,7 @@ const MyEmployeeList = () => {
                 {new Date(emp.affiliationDate).toLocaleDateString()}
               </p>
               <p className="mt-1">
-                Status:
+                Status :
                 <span
                   className={`font-semibold ${
                     emp.status === "active" ? "text-green-600" : "text-red-600"
@@ -61,6 +63,10 @@ const MyEmployeeList = () => {
                   {emp.status}
                 </span>
               </p>
+              <div className="flex justify-between">
+                <p>Assets Count: {emp.assetsCount}</p>
+                <button className="btn btn-warning text-white">Remove</button>
+              </div>
             </div>
           </div>
         ))}

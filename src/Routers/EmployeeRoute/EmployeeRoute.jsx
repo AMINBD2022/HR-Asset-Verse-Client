@@ -1,32 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
-import useAxios from "../../hooks/useAxios";
 import { Navigate } from "react-router";
+import useRole from "../../hooks/useRole";
 
 const EmployeeRoute = ({ children }) => {
   const { user, loading } = useAuth();
-  const axiosURL = useAxios();
-  const { data: userInfo, isLoading } = useQuery({
-    queryKey: ["userRole", user?.email],
-    queryFn: async () => {
-      const res = await axiosURL.get(`/users/${user?.email}`);
-      return res.data;
-    },
-  });
+  const { role, roleLoading } = useRole();
 
-  if (loading || isLoading) {
+  if (loading || roleLoading) {
     return <p>Loading...</p>;
   }
 
   if (!user) {
-    return <Navigate to="/auth/login" />;
+    return <Navigate to="/login" />;
   }
 
-  if (isLoading) {
-    return <p>Checking permission...</p>;
-  }
-
-  if (userInfo.role !== "employee") {
+  if (role !== "employee") {
     return <Navigate to="/" />;
   }
   return children;
