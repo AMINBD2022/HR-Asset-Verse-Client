@@ -76,10 +76,9 @@ const AllRequests = () => {
           <thead>
             <tr className="bg-gray-200">
               <th>Asset Name</th>
-              <th>Requester</th>
-              <th>Quantity</th>
+              <th>Employee</th>
+              <th>Date</th>
               <th>Status</th>
-              <th>Note</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -88,11 +87,9 @@ const AllRequests = () => {
             {requests.map((req) => (
               <tr key={req._id}>
                 <td>{req.assetName}</td>
-                <td>{req.requesterEmail}</td>
-                <td>{req.requestedQuantity}</td>
+                <td>{req.requesterName}</td>
+                <td>{new Date(req.requestDate).toLocaleString()}</td>
                 <td className="capitalize">{req.requestStatus}</td>
-                <td>{req.note || "—"}</td>
-
                 <td>
                   {req.requestStatus === "pending" ? (
                     <div className="flex gap-2">

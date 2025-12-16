@@ -11,17 +11,16 @@ import ErrorPage from "../../Pages/ErrorPage/ErrorPage";
 import AddAsset from "../../Pages/AddAsset/AddAsset";
 import MyEmployeeList from "../../Pages/MyEmployyList/MyEmployeeList";
 import AllAsset from "../../Pages/AssetListPage/AllAsset";
-import MyAsset from "../../Pages/My-Assets/MyAsset";
 import MyTeam from "../../Pages/MyTeam/MyTeam";
 import EmployeeForm from "../../Components/EmployeeForm";
 import EmployeeProfile from "../../Pages/EmployeeProfile/EmployeeProfile";
 import HrProfile from "../../Pages/HrProfile/HrProfile";
-import AssignedAssets from "../../Pages/AssignedAssets/AssignedAssets";
+import AssignedAssets from "../../Pages/MyAssets/MyAssets";
 import AdminRoute from "../AdminRoutes/AdminRoute";
 import EmployeeRoute from "../EmployeeRoute/EmployeeRoute";
-import HrAdminRegisterForm from "../../Components/HrAdminRegisterForm";
 import Register from "../../Pages/RegisterPage/Register";
 import About from "../../Components/AboutSection/About";
+import MyAssets from "../../Pages/MyAssets/MyAssets";
 
 const router = createBrowserRouter([
   {
@@ -93,7 +92,7 @@ const router = createBrowserRouter([
         path: "/my-assets",
         element: (
           <EmployeeRoute>
-            <AssignedAssets />
+            <MyAssets />
           </EmployeeRoute>
         ),
       },

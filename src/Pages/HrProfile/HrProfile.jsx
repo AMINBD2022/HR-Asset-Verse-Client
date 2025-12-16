@@ -7,7 +7,6 @@ const HrProfile = () => {
   console.log(user);
 
   const axiosURL = useAxios();
-  console.log(user);
 
   const { data: hrData = {}, isLoading: loading } = useQuery({
     queryKey: ["hrData", user?.email],

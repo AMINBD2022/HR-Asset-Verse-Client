@@ -7,9 +7,11 @@ const Root = () => {
   return (
     <div className="flex flex-col justify-between min-h-screen ">
       <Header />
-      <main className="w-11/12 mx-auto ">
-        <Outlet />
-      </main>
+      <section className="bg-base-200">
+        <main className="w-11/12 mx-auto ">
+          <Outlet />
+        </main>
+      </section>
       <Footer />
     </div>
   );

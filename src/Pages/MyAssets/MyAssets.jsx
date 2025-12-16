@@ -1,25 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import useAxios from "../../hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
+import { IoSearchOutline } from "react-icons/io5";
 
-const AssignedAssets = () => {
+const MyAssets = () => {
   const axiosURL = useAxios();
   const { user } = useAuth();
-  const { data: AssignedAssets = [] } = useQuery({
-    queryKey: ["AssignedAssets", user.email],
+  const [page, setPage] = useState(0);
+  const limit = 10;
+  const skip = page * limit;
+
+  const { data } = useQuery({
+    queryKey: ["AssignedAssets", user?.email, page],
+    enabled: !!user?.email,
     queryFn: async () => {
       const res = await axiosURL.get(
-        `/assignedAssets?employeeEmail=${user.email}`
+        `/assignedAssets?employeeEmail=${user.email}&limit=${limit}&skip=${skip}`
       );
       return res.data;
     },
   });
+  const total = data?.total ?? 0;
+  const totalPages = Math.ceil(total / limit);
+
   return (
     <div className="mx-auto w-11/12 py-6">
-      <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
-        All Assigned Assets
-      </h2>
+      <div className="lg:flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold text-gray-800">
+          Total Assigned Assets {data?.total}
+        </h2>
+        <label className="input">
+          <input type="search" required placeholder="Search" />
+        </label>
+      </div>
+
       <div className="overflow-x-auto shadow rounded-lg">
         <table className="table w-full">
           <thead className="bg-gray-100">
@@ -34,7 +49,7 @@ const AssignedAssets = () => {
           </thead>
 
           <tbody>
-            {AssignedAssets.map((item, index) => (
+            {data?.result?.map((item, index) => (
               <tr key={item._id} className="hover:bg-gray-50">
                 <td>{index + 1}</td>
 
@@ -65,8 +80,33 @@ const AssignedAssets = () => {
           </tbody>
         </table>
       </div>
+      <div className="text-center mt-5 space-x-2">
+        <button
+          className="btn"
+          disabled={page === 0}
+          onClick={() => setPage((prev) => prev - 1)}
+        >
+          Prev
+        </button>
+        {[...Array(totalPages).keys()].map((i) => (
+          <button
+            key={i}
+            onClick={() => setPage(i)}
+            className={`btn ${page === i ? "btn-secondary" : ""}`}
+          >
+            {i + 1}
+          </button>
+        ))}
+        <button
+          className="btn"
+          disabled={page + 1 === totalPages}
+          onClick={() => setPage((prev) => prev + 1)}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
 
-export default AssignedAssets;
+export default MyAssets;

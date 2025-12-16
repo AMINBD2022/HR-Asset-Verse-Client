@@ -77,7 +77,7 @@ const Header = () => {
         <NavLink to="/all-requests">All Requests</NavLink>
       </li>
       <li>
-        <NavLink to="/employee-list">Employee List</NavLink>
+        <NavLink to="/employee-list">My Employee List</NavLink>
       </li>
       <li>
         <NavLink to="/upgrade-Package">Upgrade Package</NavLink>

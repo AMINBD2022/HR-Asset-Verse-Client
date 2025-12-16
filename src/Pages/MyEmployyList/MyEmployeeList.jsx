@@ -27,7 +27,9 @@ const MyEmployeeList = () => {
 
   return (
     <div className="w-11/12 mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-6">My All Employees</h2>
+      <h2 className="text-3xl font-bold mb-6">
+        My All Employees <span className="text-xl">({Myemployees.length})</span>
+      </h2>
 
       <div className="grid md:grid-cols-3 gap-6">
         {Myemployees.map((emp) => (
@@ -52,16 +54,6 @@ const MyEmployeeList = () => {
               <p className="mt-4 text-gray-600">
                 Affiliation Date:{" "}
                 {new Date(emp.affiliationDate).toLocaleDateString()}
-              </p>
-              <p className="mt-1">
-                Status :
-                <span
-                  className={`font-semibold ${
-                    emp.status === "active" ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {emp.status}
-                </span>
               </p>
               <div className="flex justify-between">
                 <p>Assets Count: {emp.assetsCount}</p>

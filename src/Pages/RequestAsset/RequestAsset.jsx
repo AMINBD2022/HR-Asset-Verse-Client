@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-import PageLoader from "../../Components/PageLoader";
 import useAxios from "../../hooks/useAxios";
+import { RxCross2 } from "react-icons/rx";
 
 const RequestAsset = () => {
-  const { user, isLoading: loading } = useAuth();
+  const { user } = useAuth();
   const axiosURL = useAxios();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
+  const modalRef = useRef();
+  const [request, setRequest] = useState({});
 
   // Load all assets
   const { data: assets = [], isLoading } = useQuery({
@@ -22,29 +23,22 @@ const RequestAsset = () => {
   });
 
   if (isLoading) return <p className="text-center">Loading assets...</p>;
+
   // Handle form submit
+
   const handleAssetRequst = async (data) => {
-    const selectedAsset = assets.find((a) => a._id === data.assetId);
-
-    if (!selectedAsset) {
-      return Swal.fire({
-        icon: "error",
-        title: "Invalid Selection",
-      });
-    }
-
-    //  request data ------------------
+    //  request data  Genarate------------------
     const requestAssetData = {
-      assetId: selectedAsset._id,
-      assetName: selectedAsset.productName,
-      assetImage: selectedAsset.productImage,
-      assetType: selectedAsset.productType,
+      assetId: request._id,
+      assetName: request.productName,
+      assetImage: request.productImage,
+      assetType: request.productType,
       requesterName: user?.displayName,
       requesterEmail: user?.email,
-      hrEmail: selectedAsset.hrEmail,
-      companyName: selectedAsset.companyName,
+      hrEmail: request.hrEmail,
+      companyName: request.companyName,
       requestStatus: "pending",
-      requestDate: new Date(),
+      requestDate: new Date().toLocaleString(),
       approvalDate: null,
       processedBy: null,
       note: data.note,
@@ -55,6 +49,8 @@ const RequestAsset = () => {
       .post("/requestAsset", requestAssetData)
       .then((res) => {
         if (res.data.insertedId) {
+          modalRef.current.close();
+          reset();
           Swal.fire({
             icon: "success",
             title: "Request submitted!",
@@ -72,41 +68,97 @@ const RequestAsset = () => {
       });
   };
 
+  const handleOpenModal = (asset) => {
+    setRequest(asset);
+    modalRef.current.showModal();
+    modalRef.current.focus();
+  };
+
   return (
     <div className="hero min-h-screen bg-base-200">
-      <div className="hero-content w-full flex-col">
-        <div className="card bg-base-100 w-full max-w-lg shadow-xl">
-          <div className="card-body">
-            <h2 className="text-3xl">Requst An Asset</h2>
-            <form onSubmit={handleSubmit(handleAssetRequst)}>
-              <fieldset className="fieldset">
-                {/* Select Asset */}
-                <div>
-                  <label className="font-medium">Select Asset</label>
-                  <select className="select w-full" {...register("assetId")}>
-                    <option value="">Choose an asset</option>
-                    {assets.map((asset) => (
-                      <option key={asset._id} value={asset._id}>
-                        {asset.productName} ({asset.availableQuantity}
-                        available)
-                      </option>
-                    ))}
-                  </select>
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        {assets.map(
+          (asset) =>
+            asset.availableQuantity > 0 && (
+              <div
+                key={asset._id}
+                className="card bg-base-100 max-w-96 shadow-sm hover:shadow-lg"
+              >
+                <figure>
+                  <img
+                    src={asset.productImage}
+                    alt={asset.productName}
+                    className="w-full h-auto aspect-2/1 object-cover"
+                  />
+                </figure>
+                <div className="card-body p-3">
+                  <h2 className="card-title border-b">{asset.productName}</h2>
+                  <h2>
+                    <span className="font-bold">Company : </span>
+                    <span className="text-sm">{asset.companyName}</span>
+                  </h2>
+                  <div>
+                    <p>
+                      {asset.productType}({" "}
+                      <span className="text-secondary">
+                        {asset.availableQuantity}
+                      </span>
+                      ) products Available
+                    </p>
+                  </div>
+                  <div className="card-actions justify-start">
+                    <button
+                      onClick={() => handleOpenModal(asset)}
+                      className="btn btn-secondary"
+                    >
+                      Request Now
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <label className="font-medium">Note/Reason</label>
-                  <textarea
-                    className="textarea w-full"
-                    {...register("note")}
-                  ></textarea>
-                </div>
-
-                <button className="btn btn-secondary"> Submit A Requst</button>
-              </fieldset>
+              </div>
+            )
+        )}
+      </div>
+      {/*---------------- Modal For Asset Reques ---------------- */}
+      <dialog
+        ref={modalRef}
+        tabIndex="-1"
+        className="modal modal-bottom sm:modal-middle"
+      >
+        <div className="modal-box">
+          <h2 className="text-2xl font-semibold mb-4 text-center">
+            Request An Asset
+          </h2>
+          <h2>
+            <span className="font-bold text-lg"> Product Name :</span>{" "}
+            {request.productName} & {request.availableQuantity} Product
+            available
+          </h2>
+          <form
+            onSubmit={handleSubmit(handleAssetRequst)}
+            className="space-y-4"
+          >
+            <label className="label mb-2">Reason: </label>
+            <textarea
+              {...register("note", {
+                required: true,
+              })}
+              className="w-full textarea"
+              placeholder="Note..."
+            ></textarea>
+            <button className="btn btn-secondary w-full mt-2">
+              Request Now
+            </button>
+          </form>
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn btn-sm">
+                <RxCross2 />
+              </button>
             </form>
           </div>
         </div>
-      </div>
+      </dialog>
     </div>
   );
 };
