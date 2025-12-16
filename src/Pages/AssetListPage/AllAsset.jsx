@@ -1,16 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 import { FaRegEdit } from "react-icons/fa";
 import { MdAutoDelete } from "react-icons/md";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 const AllAsset = () => {
   const axiosURL = useAxios();
   const { user } = useAuth();
   const modalRef = useRef();
+  const [editProduct, setEditProduct] = useState({});
   const { register, handleSubmit } = useForm();
   const {
     data: assets = [],
@@ -18,14 +20,14 @@ const AllAsset = () => {
     refetch,
     isError,
   } = useQuery({
-    queryKey: ["assets"],
+    queryKey: ["assets", user.email],
     queryFn: async () => {
       const res = await axiosURL.get(`/assets?hrEmail=${user.email}`);
       return res.data;
     },
   });
 
-  const handleDeleteAsset = async (asset) => {
+  const handleDeleteAsset = async (id) => {
     Swal.fire({
       title: "Are you sure?",
       text: "This Asset will be permanently deleted!",
@@ -35,7 +37,7 @@ const AllAsset = () => {
       cancelButtonText: "Cancel",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await axiosURL.delete(`/assets/${asset._id}`);
+        const res = await axiosURL.delete(`/assets/${id}`);
 
         if (res.data.deletedCount > 0) {
           Swal.fire("Deleted!", "Request removed successfully", "success");
@@ -44,8 +46,36 @@ const AllAsset = () => {
       }
     });
   };
-  const handleEditAsset = (asset) => {
+  const handleOpenModal = (item) => {
     modalRef.current.showModal();
+    setEditProduct(item);
+  };
+
+  const handleEditAsset = async (data) => {
+    const imageFile = data.file[0];
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    const imageBB = await axios.post(
+      `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`,
+      formData
+    );
+    console.log(data);
+
+    const updatedAsset = {
+      productName: data.assetName,
+      productType: data.assetType,
+      productQuantity: data.quantity,
+      productImage: imageBB.data.data.url,
+    };
+    const res = await axiosURL.patch(
+      `/assets/${editProduct._id}`,
+      updatedAsset
+    );
+    if (res.data.modifiedCount) {
+      Swal.fire("Updated!", "Asset updated successfully", "success");
+      modalRef.current.close();
+      refetch();
+    }
   };
 
   if (isLoading) return <p className="text-center">Loading...</p>;
@@ -63,7 +93,7 @@ const AllAsset = () => {
               <th>#</th>
               <th>Product</th>
               <th>Type</th>
-              <th>Total & Available Qty</th>
+              <th>Total Assets</th>
               <th>Added Date</th>
               <th className="text-center"> Actions</th>
             </tr>
@@ -95,9 +125,7 @@ const AllAsset = () => {
                   </span>
                 </td>
 
-                <td>
-                  {item.productQuantity} - {item.availableQuantity}
-                </td>
+                <td>{item.productQuantity}</td>
                 <td>{new Date(item.dateAdded).toLocaleDateString()}</td>
                 <td className="text-center">
                   <button
@@ -108,7 +136,7 @@ const AllAsset = () => {
                   </button>
                   <button
                     className="btn ml-2"
-                    onClick={() => handleEditAsset(item._id)}
+                    onClick={() => handleOpenModal(item)}
                   >
                     <FaRegEdit />
                   </button>
@@ -125,13 +153,14 @@ const AllAsset = () => {
           <h2 className="text-2xl font-semibold mb-4 text-center">
             Update Your Asset
           </h2>
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit(handleEditAsset)} className="space-y-4">
             {/* Asset Name */}
             <div>
               <label className="label">Asset Name</label>
               <input
                 {...register("assetName", { required: true })}
                 type="text"
+                defaultValue={editProduct.productName}
                 placeholder="Laptop, Chair, Monitor..."
                 className="input w-full"
               />
@@ -141,6 +170,12 @@ const AllAsset = () => {
 
             <div>
               <label className="label">Product Image</label>
+              {editProduct.productImage && (
+                <img
+                  src={editProduct.productImage}
+                  className="w-20 h-20 mb-2"
+                />
+              )}
               <input
                 {...register("file")}
                 type="file"
@@ -152,6 +187,7 @@ const AllAsset = () => {
               <label className="label">Asset Type</label>
               <select
                 {...register("assetType", { required: true })}
+                defaultValue={editProduct?.productType}
                 className="select w-full"
               >
                 <option disabled>Select Type</option>
@@ -165,6 +201,7 @@ const AllAsset = () => {
               <label className="label">Quantity</label>
               <input
                 {...register("quantity", { required: true })}
+                defaultValue={editProduct.productQuantity}
                 type="number"
                 min="1"
                 className="input w-full"
