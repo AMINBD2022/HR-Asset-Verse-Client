@@ -1,4 +1,4 @@
-import heroImg from "../../assets/bussniess.webp";
+import heroImg from "../assets/bussniess.webp";
 const Hero = () => {
   return (
     <div className="bg-gray-50 py-20">

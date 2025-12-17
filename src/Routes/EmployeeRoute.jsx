@@ -1,7 +1,7 @@
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 import { Navigate } from "react-router";
-import useRole from "../../hooks/useRole";
-import PageLoader from "../../Components/PageLoader";
+import useRole from "../hooks/useRole";
+import PageLoader from "../Components/PageLoader";
 
 const EmployeeRoute = ({ children }) => {
   const { user, isLoading } = useAuth();

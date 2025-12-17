@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router";
-import useAuth from "../../hooks/useAuth";
-import Logo from "../Logo";
-import useAxios from "../../hooks/useAxios";
+import useAuth from "../hooks/useAuth";
+import Logo from "./Logo";
+import useAxios from "../hooks/useAxios";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
 import { IoMdMenu } from "react-icons/io";
@@ -101,9 +101,10 @@ const Header = () => {
       })
       .catch((err) => console.log(err));
   };
-  if (isLoading || loading) {
-    return <p>Loading....</p>;
-  }
+
+  // if (isLoading || loading) {
+  //   return <p>Loading....</p>;
+  // }
   return (
     <div className="shadow-sm sticky top-2 z-100">
       <div className="navbar bg-base-100 w-11/12 mx-auto">

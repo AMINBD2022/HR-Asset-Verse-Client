@@ -25,8 +25,9 @@ const HrProfile = () => {
     enabled: !!user?.email,
   });
 
-  if (isLoading || loading)
-    return <p className="text-center mt-10">Loading...</p>;
+  // if (isLoading || loading)
+  //   return <p className="text-center mt-10">Loading...</p>;
+
   const handleOpenModal = (user) => {
     modalRef.current.showModal();
     setUpdateUser(user);

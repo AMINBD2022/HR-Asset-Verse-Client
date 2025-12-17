@@ -7,7 +7,7 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 import { MdAddIcCall } from "react-icons/md";
-import Logo from "../Logo";
+import Logo from "./Logo";
 
 const Footer = () => {
   return (

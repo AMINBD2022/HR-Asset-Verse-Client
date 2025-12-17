@@ -1,6 +1,5 @@
 import React from "react";
-import Hero from "../../Components/Hero/Hero";
-import About from "../../Components/AboutSection/About";
+import About from "../../Components/About";
 import Packages from "../../Components/Packages";
 import TestimonialsSection from "../../Components/Testimonials";
 import FAQSection from "../../Components/FAQSection";
@@ -8,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import useAxios from "../../hooks/useAxios";
 import { motion } from "framer-motion";
+import Hero from "../../Components/Hero";
 
 const Home = () => {
   const { user } = useAuth();
@@ -25,7 +25,7 @@ const Home = () => {
     show: { opacity: 1, y: 0, transition: { duration: 0.7 } },
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  // if (isLoading) return <p>Loading...</p>;
   return (
     <div className=" py-10 px-5">
       <motion.div

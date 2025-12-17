@@ -1,7 +1,6 @@
 import React from "react";
-import Logo from "../../Components/Logo";
 import { Outlet } from "react-router";
-import Header from "../../Components/Header/Header";
+import Header from "../Components/Header";
 
 const AuthLayout = () => {
   return (

@@ -1,32 +1,29 @@
 import { createBrowserRouter, Navigate } from "react-router";
-import Root from "../../LayOuts/RootLayout/Root";
-import Home from "../../Pages/HomePage/Home";
-import Login from "../../LayOuts/AuthLayouts/Login/Login";
-import AuthLayout from "../../LayOuts/AuthLayouts/AuthLayout";
-import AllRequests from "../../Pages/AllRequests/AllRequests";
-import UpgradePackage from "../../Pages/Upgrade-Package/UpgradePackage";
-import RequestAsset from "../../Pages/RequestAsset/RequestAsset";
-import PrivateRoute from "../PrivateRouts/PrivateRoute";
-import ErrorPage from "../../Pages/ErrorPage/ErrorPage";
-import AddAsset from "../../Pages/AddAsset/AddAsset";
-import MyEmployeeList from "../../Pages/MyEmployyList/MyEmployeeList";
-import AllAsset from "../../Pages/AssetListPage/AllAsset";
-import MyTeam from "../../Pages/MyTeam/MyTeam";
-import EmployeeForm from "../../Components/EmployeeForm";
-import EmployeeProfile from "../../Pages/EmployeeProfile/EmployeeProfile";
-import HrProfile from "../../Pages/HrProfile/HrProfile";
-import AssignedAssets from "../../Pages/MyAssets/MyAssets";
-import AdminRoute from "../AdminRoutes/AdminRoute";
-import EmployeeRoute from "../EmployeeRoute/EmployeeRoute";
-import Register from "../../Pages/RegisterPage/Register";
-import About from "../../Components/AboutSection/About";
-import MyAssets from "../../Pages/MyAssets/MyAssets";
-import PaymentSuccess from "../../Pages/paymentSuccess/payment-success";
+import Home from "../Pages/HomePage/Home";
+import AllRequests from "../Pages/AllRequests/AllRequests";
+import UpgradePackage from "../Pages/Upgrade-Package/UpgradePackage";
+import RequestAsset from "../Pages/RequestAsset/RequestAsset";
+import ErrorPage from "../Pages/ErrorPage/ErrorPage";
+import AddAsset from "../Pages/AddAsset/AddAsset";
+import MyEmployeeList from "../Pages/MyEmployyList/MyEmployeeList";
+import AllAsset from "../Pages/AssetListPage/AllAsset";
+import MyTeam from "../Pages/MyTeam/MyTeam";
+import EmployeeProfile from "../Pages/EmployeeProfile/EmployeeProfile";
+import HrProfile from "../Pages/HrProfile/HrProfile";
+import EmployeeRoute from "./EmployeeRoute";
+import Register from "../Pages/RegisterPage/Register";
+import About from "../Components/About";
+import MyAssets from "../Pages/MyAssets/MyAssets";
+import PaymentSuccess from "../Pages/paymentSuccess/payment-success";
+import Login from "../Pages/Login/Login";
+import RootLayout from "../Layouts/RootLayout";
+import AuthLayout from "../Layouts/AuthLayout";
+import AdminRoute from "./AdminRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <RootLayout />,
     children: [
       { index: true, element: <Home /> },
 

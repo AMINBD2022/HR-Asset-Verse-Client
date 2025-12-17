@@ -56,6 +56,9 @@ const AuthProvider = ({ children }) => {
     setisLoading,
   };
 
+  if (isLoading) {
+    return <PageLoader />;
+  }
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );

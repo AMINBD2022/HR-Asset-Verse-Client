@@ -78,7 +78,7 @@ const AllAsset = () => {
     }
   };
 
-  if (isLoading) return <p className="text-center">Loading...</p>;
+  // if (isLoading) return <p className="text-center">Loading...</p>;
   if (isError)
     return <p className="text-center text-red-500">Failed to load assets</p>;
 
