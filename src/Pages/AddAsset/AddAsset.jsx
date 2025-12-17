@@ -9,7 +9,7 @@ const AddAsset = () => {
   const axiosURL = useAxios();
   const { user } = useAuth();
 
-  const { register, handleSubmit } = useForm();
+  const { register, reset, handleSubmit } = useForm();
 
   const handleAsset = async (data) => {
     const { companyName } = await axiosURL
@@ -44,6 +44,7 @@ const AddAsset = () => {
       .post("/assets", newAsset)
       .then((res) => {
         if (res.data.insertedId) {
+          reset();
           Swal.fire({
             icon: "success",
             title: "Asset Added!",

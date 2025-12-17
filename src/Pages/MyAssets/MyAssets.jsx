@@ -10,13 +10,14 @@ const MyAssets = () => {
   const [page, setPage] = useState(0);
   const limit = 10;
   const skip = page * limit;
+  const [filter, setFilter] = useState("");
 
   const { data } = useQuery({
-    queryKey: ["AssignedAssets", user?.email, page],
+    queryKey: ["AssignedAssets", user?.email, page, filter],
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axiosURL.get(
-        `/assignedAssets?employeeEmail=${user.email}&limit=${limit}&skip=${skip}`
+        `/assignedAssets?employeeEmail=${user.email}&limit=${limit}&skip=${skip}&filter=${filter}`
       );
       return res.data;
     },
@@ -25,14 +26,26 @@ const MyAssets = () => {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="mx-auto w-11/12 py-6">
-      <div className="lg:flex justify-between items-center mb-4">
+    <div className="mx-auto w-11/12 py-10">
+      <div className="flex flex-col lg:flex-row gap-3 justify-between items-center my-6">
         <h2 className="text-2xl font-bold text-gray-800">
           Total Assigned Assets {data?.total}
         </h2>
         <label className="input">
           <input type="search" required placeholder="Search" />
         </label>
+        <select
+          value={filter}
+          onChange={(e) => {
+            setPage(0);
+            setFilter(e.target.value);
+          }}
+          className="select"
+        >
+          <option value="">All Assets</option>
+          <option value="Non-returnable">Non-returnable</option>
+          <option value="Returnable">Returnable</option>
+        </select>
       </div>
 
       <div className="overflow-x-auto shadow rounded-lg">
@@ -73,7 +86,7 @@ const MyAssets = () => {
 
                 <td>{item.processedBy}</td>
                 <td>{item.companyName}</td>
-                <td>{new Date(item.assignmentDate).toLocaleDateString()}</td>
+                <td>{new Date(item.assignmentDate).toLocaleString()}</td>
                 <td>
                   {" "}
                   {item.assetType === "Returnable" ? (
@@ -89,6 +102,8 @@ const MyAssets = () => {
           </tbody>
         </table>
       </div>
+
+      {/* --------------------------Pagination ---------------------- */}
       <div className="text-center mt-5 space-x-2">
         <button
           className="btn"

@@ -21,6 +21,7 @@ import EmployeeRoute from "../EmployeeRoute/EmployeeRoute";
 import Register from "../../Pages/RegisterPage/Register";
 import About from "../../Components/AboutSection/About";
 import MyAssets from "../../Pages/MyAssets/MyAssets";
+import PaymentSuccess from "../../Pages/paymentSuccess/payment-success";
 
 const router = createBrowserRouter([
   {
@@ -133,6 +134,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <Register />,
+      },
+      {
+        path: "/payment-success",
+        element: <PaymentSuccess />,
       },
     ],
   },

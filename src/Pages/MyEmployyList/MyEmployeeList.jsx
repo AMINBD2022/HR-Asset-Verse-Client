@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const MyEmployeeList = () => {
   const axiosURL = useAxios();
@@ -11,6 +12,7 @@ const MyEmployeeList = () => {
     data: Myemployees = [],
     isLoading,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ["employeeList", user.email],
     queryFn: async () => {
@@ -19,6 +21,27 @@ const MyEmployeeList = () => {
     },
   });
 
+  const handleDeleteEmployee = async (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await axiosURL.delete(`/myEmployeeList/${id}?hrEmail=${user?.email}`);
+        refetch();
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
+  };
   if (isLoading) return <p className="text-center mt-10">Loading...</p>;
   if (isError)
     return (
@@ -57,7 +80,12 @@ const MyEmployeeList = () => {
               </p>
               <div className="flex justify-between">
                 <p>Assets Count: {emp.assetsCount}</p>
-                <button className="btn btn-warning text-white">Remove</button>
+                <button
+                  onClick={() => handleDeleteEmployee(emp._id)}
+                  className="btn btn-warning text-white"
+                >
+                  Remove
+                </button>
               </div>
             </div>
           </div>

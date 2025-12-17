@@ -71,15 +71,15 @@ const AllRequests = () => {
     <div className="p-6">
       <h2 className="text-3xl font-bold mb-5">Manage Asset Requests</h2>
 
-      <div className="overflow-x-auto">
-        <table className="table w-full border">
+      <div className="overflow-x-auto ">
+        <table className="table w-full border overflow-hidden x-auto">
           <thead>
             <tr className="bg-gray-200">
               <th>Asset Name</th>
               <th>Employee</th>
               <th>Date</th>
               <th>Status</th>
-              <th>Action</th>
+              <th className="text-end lg:pr-20">Action</th>
             </tr>
           </thead>
 
@@ -92,7 +92,7 @@ const AllRequests = () => {
                 <td className="capitalize">{req.requestStatus}</td>
                 <td>
                   {req.requestStatus === "pending" ? (
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 justify-end">
                       <button
                         onClick={() => handleApprove(req)}
                         className="btn btn-success btn-sm"

@@ -52,11 +52,12 @@ const Header = () => {
       <li>
         <NavLink to="/my-assets">My Assets</NavLink>
       </li>
-      <li>
-        <NavLink to="/my-team">My Team</NavLink>
-      </li>
+
       <li>
         <NavLink to="/request-asset">Request Asset</NavLink>
+      </li>
+      <li>
+        <NavLink to="/my-team">My Team</NavLink>
       </li>
       <li>
         <NavLink to="/employeeProfile">Profile</NavLink>
@@ -104,7 +105,7 @@ const Header = () => {
     return <p>Loading....</p>;
   }
   return (
-    <div className="shadow-sm ">
+    <div className="shadow-sm sticky top-2 z-100">
       <div className="navbar bg-base-100 w-11/12 mx-auto">
         <div className="navbar-start">
           <div className="dropdown">
@@ -135,7 +136,7 @@ const Header = () => {
               Login
             </NavLink>
           ) : (
-            <div className="dropdown dropdown-end">
+            <div className="dropdown dropdown-end ">
               <div
                 tabIndex={0}
                 role="button"
@@ -151,19 +152,25 @@ const Header = () => {
                   />
                 </div>
               </div>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow "
-              >
-                {userRole.role === "employee" && employeeMenu}
-                {userRole.role === "Hr" && hrMenu}
-                <div className="divider my-2"></div>
-                <li>
-                  <button onClick={handleLogOut} className="btn btn-secondary">
-                    Log Out
-                  </button>
-                </li>
-              </ul>
+              <div className="hidden lg:block">
+                {" "}
+                <ul
+                  tabIndex={0}
+                  className="  menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow "
+                >
+                  {userRole.role === "employee" && employeeMenu}
+                  {userRole.role === "Hr" && hrMenu}
+                  <div className="divider my-2"></div>
+                  <li>
+                    <button
+                      onClick={handleLogOut}
+                      className="btn btn-secondary"
+                    >
+                      Log Out
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </div>
           )}
         </div>
