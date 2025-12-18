@@ -63,7 +63,7 @@ const AddAsset = () => {
       });
   };
   return (
-    <div className="w-11/12 max-w-xl mx-auto p-6 bg-white shadow rounded-lg my-15 border">
+    <div className="w-11/12 max-w-xl mx-auto p-6 bg-white shadow rounded-lg my-15 border border-base-300">
       <h2 className="text-2xl font-semibold mb-4 text-center">Add New Asset</h2>
       <form onSubmit={handleSubmit(handleAsset)} className="space-y-4">
         {/* Asset Name */}

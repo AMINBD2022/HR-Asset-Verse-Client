@@ -69,6 +69,7 @@ const EmployeeForm = () => {
           <input
             {...register("email")}
             type="email"
+            required
             className="input w-full"
             placeholder="Your email"
           />
@@ -80,6 +81,7 @@ const EmployeeForm = () => {
             {...register("password")}
             type={show ? "text" : "password"}
             className="input w-full"
+            required
             placeholder="Password"
           />
           <span
@@ -92,7 +94,12 @@ const EmployeeForm = () => {
 
         <div>
           <label className="label">Date Of Birth</label>
-          <input {...register("date")} type="date" className="input w-full" />
+          <input
+            {...register("date")}
+            type="date"
+            required
+            className="input w-full"
+          />
         </div>
 
         <button

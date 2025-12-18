@@ -4,10 +4,11 @@ import useAuth from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import AlreadyLoggedIn from "../../Components/AlreadyLoggedIn";
 
 const Login = () => {
   const [show, setShow] = useState(false);
-  const { loginUser, setUser } = useAuth();
+  const { loginUser, setUser, user } = useAuth();
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const location = useLocation();
@@ -18,7 +19,7 @@ const Login = () => {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Registation successfull",
+          title: "Login successfull",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -28,7 +29,9 @@ const Login = () => {
         console.log(err);
       });
   };
-  return (
+  return user ? (
+    <AlreadyLoggedIn />
+  ) : (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content w-full flex-col">
         <div className="card bg-base-100 w-full max-w-lg shadow-xl">
@@ -42,6 +45,7 @@ const Login = () => {
                   {...register("email")}
                   type="email"
                   className="input w-full"
+                  required
                   placeholder="Email"
                 />
                 <div className="relative">
@@ -51,6 +55,7 @@ const Login = () => {
                     type={show ? "text" : "password"}
                     className="input w-full"
                     placeholder="Password"
+                    required
                   />
                   <span
                     onClick={() => setShow(!show)}
@@ -60,7 +65,15 @@ const Login = () => {
                   </span>
                 </div>
                 <span>Forgot your password?</span>
-                <button className="btn btn-secondary mt-4">Sign In</button>
+                <button
+                  className="btn text-white bg-[#724ebf] w-full mt-3"
+                  style={{
+                    background:
+                      "radial-gradient(100.03% 140.18% at 0% 85.53%, #ff00ff 0%, #724ebf 95.31%)",
+                  }}
+                >
+                  Sign In
+                </button>
               </fieldset>
             </form>
 

@@ -75,7 +75,7 @@ const EmployeeProfile = () => {
           </h2>
           <p className="text-gray-500 mt-1">
             <span className="font-bold text-black">Affilieted With :</span>{" "}
-            {user?.companyName || "All Companyes"}
+            {user?.companyName || "Many Companyes"}
           </p>
           <p className="text-gray-500 mt-1">{user?.email}</p>
 

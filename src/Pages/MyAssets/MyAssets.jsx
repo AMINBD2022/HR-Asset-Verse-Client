@@ -3,6 +3,7 @@ import useAxios from "../../hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import { motion } from "framer-motion";
+import { maskEmail } from "../../Utilities/emailMaks";
 
 const MyAssets = () => {
   const axiosURL = useAxios();
@@ -75,7 +76,7 @@ const MyAssets = () => {
               >
                 <td>{index + 1}</td>
 
-                <td className="flex items-center gap-3">
+                <td className="flex items-center gap-3 min-w-[max-content]">
                   <img
                     src={item.assetImage}
                     alt={item.assetName}
@@ -84,7 +85,7 @@ const MyAssets = () => {
                   <span>{item.assetName}</span>
                 </td>
 
-                <td>{item.processedBy}</td>
+                <td>{maskEmail(item.processedBy)}</td>
                 <td>{item.companyName}</td>
                 <td>{new Date(item.assignmentDate).toLocaleString()}</td>
                 <td>

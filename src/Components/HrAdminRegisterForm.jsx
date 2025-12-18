@@ -86,6 +86,7 @@ const HrAdminRegisterForm = () => {
             {...register("companyName")}
             type="text"
             className="input w-full"
+            required
             placeholder="Company Name"
           />
         </div>
@@ -95,12 +96,18 @@ const HrAdminRegisterForm = () => {
           <input
             {...register("file")}
             type="file"
+            required
             className="file-input w-full"
           />
         </div>
         <div>
           <label className="label">Date Of Birth</label>
-          <input {...register("date")} type="date" className="input w-full" />
+          <input
+            {...register("date")}
+            type="date"
+            required
+            className="input w-full"
+          />
         </div>
 
         <div>
@@ -108,6 +115,7 @@ const HrAdminRegisterForm = () => {
           <input
             {...register("email")}
             type="email"
+            required
             className="input w-full"
             placeholder="Your Email"
           />
@@ -118,6 +126,7 @@ const HrAdminRegisterForm = () => {
           <input
             {...register("password")}
             type={show ? "text" : "password"}
+            required
             className="input w-full"
             placeholder="Password"
           />

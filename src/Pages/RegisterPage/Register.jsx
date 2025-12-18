@@ -3,10 +3,15 @@ import { useState } from "react";
 import HrAdminRegisterForm from "../../Components/HrAdminRegisterForm";
 import EmployeeForm from "../../Components/EmployeeForm";
 import { Link } from "react-router";
+import useAuth from "../../hooks/useAuth";
+import AlreadyLoggedIn from "../../Components/AlreadyLoggedIn";
 
 const Register = () => {
   const [tab, setTab] = useState("employee");
-  return (
+  const { user } = useAuth();
+  return user ? (
+    <AlreadyLoggedIn />
+  ) : (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content w-full flex-col">
         <div className="card bg-base-100 w-full max-w-lg shadow-xl">

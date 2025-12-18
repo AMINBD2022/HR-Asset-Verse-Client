@@ -4,12 +4,13 @@ import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import PageLoader from "../Components/PageLoader";
 import useAuth from "../hooks/useAuth";
+import useRole from "../hooks/useRole";
 // import useRole from "../hooks/useRole";
 
 const RootLayout = () => {
   const { isLoading } = useAuth();
-  // const { roleLoading } = useRole();
-  if (isLoading) {
+  const { roleLoading } = useRole();
+  if (isLoading || roleLoading) {
     return <PageLoader />;
   }
   return (

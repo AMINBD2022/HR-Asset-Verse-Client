@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter, Navigate, NavLink } from "react-router";
 import Home from "../Pages/HomePage/Home";
 import AllRequests from "../Pages/AllRequests/AllRequests";
 import RequestAsset from "../Pages/RequestAsset/RequestAsset";
@@ -19,6 +19,8 @@ import AuthLayout from "../Layouts/AuthLayout";
 import AdminRoute from "./AdminRoute";
 import UpgradePackage from "../Pages/UpgradePackage/UpgradePackage";
 import Testimonial from "../Pages/Testimonial/Testimonial";
+import HrAdminRegisterForm from "../Components/HrAdminRegisterForm";
+import JoinHr from "../Pages/join-hr/JoinHr";
 
 const router = createBrowserRouter([
   {
@@ -72,7 +74,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/hrProfile",
+        path: "/profile",
         element: (
           <AdminRoute>
             <HrProfile />
@@ -126,6 +128,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <Register />,
+      },
+      {
+        path: "join-hr",
+        element: <JoinHr />,
       },
       {
         path: "/payment-success",
