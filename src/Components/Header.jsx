@@ -1,28 +1,14 @@
 import { NavLink } from "react-router";
 import useAuth from "../hooks/useAuth";
 import Logo from "./Logo";
-import useAxios from "../hooks/useAxios";
 import Swal from "sweetalert2";
-import { useQuery } from "@tanstack/react-query";
 import { IoMdMenu } from "react-icons/io";
 import useRole from "../hooks/useRole";
 
 const Header = () => {
   const { user, logOutUser } = useAuth();
-  const axiosURL = useAxios();
   const { role } = useRole();
   console.log(role);
-
-  // Get role from server
-
-  const { data: userRole = [] } = useQuery({
-    queryKey: ["userRole"],
-    queryFn: async () => {
-      const res = await axiosURL.get(`/users/${user?.email}`);
-      return res.data;
-    },
-    enabled: !!user?.email,
-  });
 
   // Public links
   const publicLinks = (
@@ -100,10 +86,10 @@ const Header = () => {
   };
 
   return (
-    <div className="shadow-sm sticky top-2 z-100 bg-base-100">
+    <div className="shadow-sm sticky top-0 z-100 bg-base-100 py-1">
       <div className="navbar w-11/12 max-w-7xl mx-auto">
         <div className="navbar-start">
-          {user && (
+          {user && role && (
             <div className="dropdown">
               <div
                 tabIndex={0}
@@ -133,7 +119,7 @@ const Header = () => {
         </div>
         <div className="navbar-end">
           {!user ? (
-            <NavLink to="/login" className="btn btn-primary">
+            <NavLink to="/login" className="custom-button">
               Login
             </NavLink>
           ) : (
@@ -141,7 +127,7 @@ const Header = () => {
               <div
                 tabIndex={0}
                 role="button"
-                className="btn btn-ghost btn-circle avatar"
+                className="btn select-secondary btn-circle avatar"
               >
                 <div className="w-10 rounded-full">
                   <img
@@ -159,9 +145,9 @@ const Header = () => {
                   tabIndex={0}
                   className="  menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow "
                 >
-                  {userRole.role === "employee" && employeeMenu}
-                  {userRole.role === "Hr" && hrMenu}
-                  <div className="divider my-2"></div>
+                  {role === "employee" && employeeMenu}
+                  {role === "Hr" && hrMenu}
+                  <div className="divider my-3"></div>
                   <li>
                     <button
                       onClick={handleLogOut}

@@ -11,17 +11,17 @@ import { auth } from "../firebase/fitebase.config";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading, setisLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   // user Register login logOut Function
 
   const registerUser = (email, password) => {
-    setisLoading(true);
+    setIsLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   const loginUser = (email, password) => {
-    setisLoading(true);
+    setIsLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
@@ -29,7 +29,7 @@ const AuthProvider = ({ children }) => {
     return updateProfile(auth.currentUser, updateProfileId);
   };
   const logOutUser = () => {
-    setisLoading(true);
+    setIsLoading(true);
     return signOut(auth);
   };
 
@@ -38,7 +38,21 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setisLoading(false);
+      if (currentUser) {
+        const loggedUser = { email: currentUser.email };
+        fetch("https://hr-asset-verse-server.vercel.app/jwtToken", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(loggedUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            localStorage.setItem("token", data.token);
+          });
+      }
+      setIsLoading(false);
     });
     return () => {
       unsubscribe();
@@ -50,9 +64,8 @@ const AuthProvider = ({ children }) => {
     updateUserProfile,
     logOutUser,
     user,
-    setUser,
     isLoading,
-    setisLoading,
+    setIsLoading,
   };
 
   return (

@@ -1,19 +1,22 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import useAxios from "../../hooks/useAxios";
 import Title from "../../Utilities/Title";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const AllRequests = () => {
-  const axiosURL = useAxios();
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+
   const {
     data: requests = [],
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["requestAsset"],
+    queryKey: ["allRequests"],
     queryFn: async () => {
-      const res = await axiosURL.get("/requestAsset");
+      const res = await axiosSecure.get(`/allRequests?hrEmail=${user.email}`);
       return res.data;
     },
   });
@@ -31,7 +34,7 @@ const AllRequests = () => {
       cancelButtonText: "Cancel",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await axiosURL.delete(`/requestAsset/${req._id}`);
+        const res = await axiosSecure.delete(`/allRequests/${req._id}`);
 
         if (res.data.deletedCount > 0) {
           Swal.fire("Deleted!", "Request removed successfully", "success");
@@ -54,7 +57,10 @@ const AllRequests = () => {
       companyName: req.companyName,
     };
 
-    const res = await axiosURL.post(`/approveRequest/${req._id}`, assignedData);
+    const res = await axiosSecure.post(
+      `/approveRequest/${req._id}`,
+      assignedData
+    );
     if (res.data.needUpgrade) {
       Swal.fire({
         icon: "error",

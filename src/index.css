@@ -12,3 +12,12 @@
 li a.active {
   @apply bg-secondary;
 }
+
+.custom-button {
+  @apply btn text-white bg-[#724ebf] py-6 px-10;
+  background: radial-gradient(
+    100.03% 140.18% at 0% 85.53%,
+    #ff00ff 0%,
+    #724ebf 95.31%
+  );
+}

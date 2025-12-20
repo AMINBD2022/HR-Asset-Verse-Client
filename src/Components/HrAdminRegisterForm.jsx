@@ -5,19 +5,19 @@ import Swal from "sweetalert2";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router";
-import useAxios from "../hooks/useAxios";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const HrAdminRegisterForm = () => {
   const [show, setShow] = useState(false);
-  const { setUser, registerUser, updateUserProfile } = useAuth();
-  const axiosURL = useAxios();
+  const { registerUser, updateUserProfile } = useAuth();
+  const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const location = useLocation();
   const { register, handleSubmit } = useForm();
 
   const handleRegistation = async (data) => {
     // Upload to ImgBB
-    const name = data.name;
+    const userName = data.name;
 
     const imageFile = data.file[0];
     const formData = new FormData();
@@ -42,15 +42,14 @@ const HrAdminRegisterForm = () => {
     };
 
     registerUser(data.email, data.password)
-      .then((data) => {
-        const firebaseUser = data.user;
-        axiosURL.post("/users", newUser).then((res) => {
+      .then(() => {
+        axiosSecure.post("/users", newUser).then((res) => {
           console.log(res.data);
           if (res.data.insertedId) {
+            navigate(location.state || "/");
             updateUserProfile({
-              displayName: name,
+              displayName: userName,
             }).then(() => {
-              setUser({ ...firebaseUser, displayName: name });
               Swal.fire({
                 position: "center",
                 icon: "success",
@@ -58,8 +57,6 @@ const HrAdminRegisterForm = () => {
                 showConfirmButton: false,
                 timer: 1500,
               });
-
-              navigate(location.state || "/");
             });
           }
         });
@@ -138,13 +135,7 @@ const HrAdminRegisterForm = () => {
           </span>
         </div>
 
-        <button
-          className="btn text-white bg-[#724ebf] w-full mt-3"
-          style={{
-            background:
-              "radial-gradient(100.03% 140.18% at 0% 85.53%, #ff00ff 0%, #724ebf 95.31%)",
-          }}
-        >
+        <button className="custom-button inline-flex" style={{ width: "100%" }}>
           Register as HR
         </button>
       </form>

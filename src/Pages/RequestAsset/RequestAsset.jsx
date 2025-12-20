@@ -3,12 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-import useAxios from "../../hooks/useAxios";
 import { RxCross2 } from "react-icons/rx";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const RequestAsset = () => {
   const { user } = useAuth();
-  const axiosURL = useAxios();
+  const axiosSecure = useAxiosSecure();
   const { register, handleSubmit, reset } = useForm();
   const modalRef = useRef();
   const [request, setRequest] = useState({});
@@ -17,7 +17,7 @@ const RequestAsset = () => {
   const { data: assets = [], isLoading } = useQuery({
     queryKey: ["assets"],
     queryFn: async () => {
-      const res = await axiosURL.get("/assets");
+      const res = await axiosSecure.get("/assets");
       return res.data;
     },
   });
@@ -45,8 +45,8 @@ const RequestAsset = () => {
     };
 
     // Submit request-----------
-    axiosURL
-      .post("/requestAsset", requestAssetData)
+    axiosSecure
+      .post("/allRequests", requestAssetData)
       .then((res) => {
         if (res.data.insertedId) {
           modalRef.current.close();

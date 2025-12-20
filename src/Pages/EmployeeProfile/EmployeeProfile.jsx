@@ -4,14 +4,16 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { IoMdClose } from "react-icons/io";
-import useAxios from "../../hooks/useAxios";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const EmployeeProfile = () => {
   const modalRef = useRef();
-  const { user, updateUserProfile } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const { user, updateUserProfile, isLoading } = useAuth();
   const [updateUser, setUpdateUser] = useState();
   const { register, handleSubmit } = useForm();
-  const axiosURL = useAxios();
+
   if (!user) {
     return (
       <div className="flex justify-center items-center h-[70vh]">
@@ -19,7 +21,16 @@ const EmployeeProfile = () => {
       </div>
     );
   }
-
+  const { data: EmployeeCompanyes = [] } = useQuery({
+    queryKey: ["EmployeeCompanyes", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/myEmployeeList?employeeEmail=${user.email}`
+      );
+      return res.data;
+    },
+  });
   const handleOpenModal = () => {
     modalRef.current.showModal();
     setUpdateUser(user);
@@ -38,7 +49,7 @@ const EmployeeProfile = () => {
       photoURL: imageBB.data.data.url,
     });
     // ---- Update Backend MongoDB Profile ----
-    await axiosURL.patch(`/users/${user.email}`, {
+    await axiosSecure.patch(`/users/${user.email}`, {
       name: data.name,
       photoURL: imageBB.data.data.url,
       phoneNumber: data.phoneNumber,
@@ -55,6 +66,7 @@ const EmployeeProfile = () => {
     modalRef.current.close();
     console.log({ name: data.name, image: imageBB.data.data.url });
   };
+
   return (
     <div className="w-11/12 md:w-8/12 lg:w-6/12 mx-auto my-10">
       <div className="card bg-base-100 shadow-xl border border-gray-200">
@@ -73,10 +85,20 @@ const EmployeeProfile = () => {
           <h2 className="text-3xl font-bold mt-4">
             {user?.displayName || "No Name Found"}
           </h2>
-          <p className="text-gray-500 mt-1">
-            <span className="font-bold text-black">Affilieted With :</span>{" "}
-            {user?.companyName || "Many Companyes"}
-          </p>
+          <div className="text-gray-500 mt-1">
+            <span className="font-bold text-black">Affilieted With :</span>
+            <div className="flex flex-wrap gap-2 justify-center items-center">
+              {isLoading ? (
+                <p>Loading...</p>
+              ) : (
+                EmployeeCompanyes.map((company, i) => (
+                  <span className="badge badge-outline badge-primary" key={i}>
+                    {company.companyName}
+                  </span>
+                ))
+              )}
+            </div>
+          </div>
           <p className="text-gray-500 mt-1">{user?.email}</p>
 
           <p className="text-gray-500">

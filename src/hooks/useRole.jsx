@@ -10,7 +10,7 @@ const useRole = () => {
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axiosURL.get(`/users/${user?.email}`);
-      return res.data?.role;
+      return res.data?.role || "employee";
     },
   });
 

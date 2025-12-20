@@ -2,6 +2,7 @@ import React from "react";
 import HrAdminRegisterForm from "../../Components/HrAdminRegisterForm";
 import useAuth from "../../hooks/useAuth";
 import AlreadyLoggedIn from "../../Components/AlreadyLoggedIn";
+import { Link } from "react-router";
 
 const JoinHr = () => {
   const { user } = useAuth();
@@ -14,9 +15,14 @@ const JoinHr = () => {
           <h2 className="text-4xl font-bold text-center">Create Account</h2>
           <p className="text-center">HR Manager</p>
           <HrAdminRegisterForm />
+          <p className="mt-4 text-center">
+            Already have an account?
+            <Link to="/login" className="text-blue-700">
+              Click here to sign in.
+            </Link>
+          </p>
         </div>
       </div>
-      <div className="hero-content w-full flex-col"></div>
     </div>
   );
 };

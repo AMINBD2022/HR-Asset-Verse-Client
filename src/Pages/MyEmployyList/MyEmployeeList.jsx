@@ -1,22 +1,24 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const MyEmployeeList = () => {
-  const axiosURL = useAxios();
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
 
   const {
     data: Myemployees = [],
-    isLoading,
     isError,
     refetch,
   } = useQuery({
     queryKey: ["employeeList", user.email],
+    enabled: !!user.email,
     queryFn: async () => {
-      const res = await axiosURL.get(`/myEmployeeList?hrEmail=${user?.email}`);
+      const res = await axiosSecure.get(
+        `/myEmployeeList?hrEmail=${user?.email}`
+      );
       return res.data;
     },
   });
@@ -32,7 +34,9 @@ const MyEmployeeList = () => {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await axiosURL.delete(`/myEmployeeList/${id}?hrEmail=${user?.email}`);
+        await axiosSecure.delete(
+          `/myEmployeeList/${id}?hrEmail=${user?.email}`
+        );
         refetch();
         Swal.fire({
           title: "Deleted!",

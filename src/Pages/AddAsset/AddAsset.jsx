@@ -3,17 +3,16 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
-import useAxios from "../../hooks/useAxios";
-import Title from "../../Utilities/Title";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const AddAsset = () => {
-  const axiosURL = useAxios();
+  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
   const { register, reset, handleSubmit } = useForm();
 
   const handleAsset = async (data) => {
-    const { companyName } = await axiosURL
+    const { companyName } = await axiosSecure
       .get(`/users/${user.email}`)
       .then((res) => {
         console.log(res.data);
@@ -41,7 +40,7 @@ const AddAsset = () => {
       companyName: companyName,
     };
     console.log(data);
-    axiosURL
+    axiosSecure
       .post("/assets", newAsset)
       .then((res) => {
         if (res.data.insertedId) {

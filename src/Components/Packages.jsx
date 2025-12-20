@@ -1,16 +1,16 @@
 import React from "react";
-import useAxios from "../hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../hooks/useAuth";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const Packages = () => {
   const { user } = useAuth();
-  const axiosURL = useAxios();
+  const axiosSecure = useAxiosSecure();
 
   const { data: packages = [] } = useQuery({
     queryKey: ["packages"],
     queryFn: async () => {
-      const res = await axiosURL.get("/packages");
+      const res = await axiosSecure.get("/packages");
       return res.data;
     },
   });
@@ -23,7 +23,7 @@ const Packages = () => {
     };
     console.log(paymentInfo);
 
-    const res = await axiosURL.post("/create-checkout-session", paymentInfo);
+    const res = await axiosSecure.post("/create-checkout-session", paymentInfo);
     window.location.href = res.data.url;
   };
   return (

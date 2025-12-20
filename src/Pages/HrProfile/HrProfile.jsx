@@ -1,28 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
-import useAxios from "../../hooks/useAxios";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoMdClose } from "react-icons/io";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { FiEdit } from "react-icons/fi";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const HrProfile = () => {
   const { user, updateUserProfile } = useAuth();
   const modalRef = useRef();
-  console.log(user);
+  const axiosSecure = useAxiosSecure();
   const { register, handleSubmit } = useForm();
-  const axiosURL = useAxios();
   const [updateUser, setUpdateUser] = useState();
 
   const { data: hrData = {} } = useQuery({
     queryKey: ["hrData", user?.email],
+    enabled: !!user.email,
     queryFn: async () => {
-      const res = await axiosURL.get(`/users/${user?.email}`);
+      const res = await axiosSecure.get(`/users/${user?.email}`);
       return res.data;
     },
-    enabled: !!user?.email,
   });
 
   const handleOpenModal = (user) => {
@@ -42,7 +41,7 @@ const HrProfile = () => {
       photoURL: imageBB.data.data.url,
     });
     // ---- Update Backend MongoDB Profile ----
-    await axiosURL.patch(`/users/${user.email}`, {
+    await axiosSecure.patch(`/users/${user.email}`, {
       name: data.name,
       photoURL: imageBB.data.data.url,
       phoneNumber: data.phoneNumber,
@@ -79,10 +78,6 @@ const HrProfile = () => {
             <h2 className="text-3xl font-bold mt-4">
               {user?.displayName || "No Name"}
             </h2>
-            <p className="text-gray-500 mt-1">
-              <span className="font-bold text-black">Affilieted With :</span>{" "}
-              {user?.companyName || "All Companyes"}
-            </p>
             <p className="text-gray-500 mt-1">
               <span className="font-semibold">Email:</span> {user?.email}
             </p>

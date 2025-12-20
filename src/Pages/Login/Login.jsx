@@ -8,14 +8,14 @@ import AlreadyLoggedIn from "../../Components/AlreadyLoggedIn";
 
 const Login = () => {
   const [show, setShow] = useState(false);
-  const { loginUser, setUser, user } = useAuth();
+  const { loginUser, user } = useAuth();
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const location = useLocation();
   const handleLogIn = (data) => {
     loginUser(data.email, data.password)
-      .then((data) => {
-        setUser(data.user);
+      .then(() => {
+        navigate(location.state || "/");
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -23,7 +23,6 @@ const Login = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate(location.state || "/");
       })
       .catch((err) => {
         console.log(err);
@@ -66,11 +65,8 @@ const Login = () => {
                 </div>
                 <span>Forgot your password?</span>
                 <button
-                  className="btn text-white bg-[#724ebf] w-full mt-3"
-                  style={{
-                    background:
-                      "radial-gradient(100.03% 140.18% at 0% 85.53%, #ff00ff 0%, #724ebf 95.31%)",
-                  }}
+                  className="custom-button inline-flex"
+                  style={{ width: "100%" }}
                 >
                   Sign In
                 </button>
@@ -113,7 +109,7 @@ const Login = () => {
             <p>
               Dont have an account?{" "}
               <Link className="text-blue-600" to="/register">
-                Register
+                Click here to Register
               </Link>
             </p>
           </div>

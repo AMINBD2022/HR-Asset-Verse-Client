@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useRef, useState } from "react";
-import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 import { FaRegEdit } from "react-icons/fa";
 import { MdAutoDelete } from "react-icons/md";
@@ -8,11 +7,11 @@ import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Title from "../../Utilities/Title";
-import { Contact } from "lucide-react";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const AllAsset = () => {
-  const axiosURL = useAxios();
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
   const modalRef = useRef();
   const [editProduct, setEditProduct] = useState({});
   const { register, handleSubmit } = useForm();
@@ -22,8 +21,9 @@ const AllAsset = () => {
     isError,
   } = useQuery({
     queryKey: ["assets", user.email],
+    enabled: !!user.email,
     queryFn: async () => {
-      const res = await axiosURL.get(`/assets?hrEmail=${user.email}`);
+      const res = await axiosSecure.get(`/assets?hrEmail=${user.email}`);
       return res.data;
     },
   });
@@ -38,7 +38,7 @@ const AllAsset = () => {
       cancelButtonText: "Cancel",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await axiosURL.delete(`/assets/${id}`);
+        const res = await axiosSecure.delete(`/assets/${id}`);
 
         if (res.data.deletedCount > 0) {
           Swal.fire("Deleted!", "Request removed successfully", "success");
@@ -68,7 +68,7 @@ const AllAsset = () => {
       productQuantity: data.quantity,
       productImage: imageBB.data.data.url,
     };
-    const res = await axiosURL.patch(
+    const res = await axiosSecure.patch(
       `/assets/${editProduct._id}`,
       updatedAsset
     );
@@ -79,7 +79,6 @@ const AllAsset = () => {
     }
   };
 
-  // if (isLoading) return <p className="text-center">Loading...</p>;
   if (isError)
     return <p className="text-center text-red-500">Failed to load assets</p>;
 

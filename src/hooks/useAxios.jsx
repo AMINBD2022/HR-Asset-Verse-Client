@@ -10,3 +10,7 @@ const useAxios = () => {
 };
 
 export default useAxios;
+
+// https://hr-asset-verse-server.vercel.app
+
+// http://localhost:5000
