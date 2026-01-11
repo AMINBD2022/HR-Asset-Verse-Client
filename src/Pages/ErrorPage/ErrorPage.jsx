@@ -1,18 +1,68 @@
-import React from "react";
-import { Link } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 const ErrorPage = () => {
-  return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-base-200 text-center p-4">
-      <h1 className="text-9xl font-bold text-error">404</h1>
-      <h2 className="text-3xl font-bold mt-4">Page Not Found</h2>
-      <p className="text-lg text-gray-500 mt-2">
-        Oops! The page you are looking for does not exist.
-      </p>
+  const [countdown, setCountdown] = useState(20);
+  const navigate = useNavigate();
 
-      <Link to="/" className="btn btn-secondary mt-6">
-        Go Back Home
-      </Link>
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          navigate("/");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [navigate]);
+
+  return (
+    <div className="min-h-screen bg-base-200 flex items-center justify-center px-4 py-12">
+      <div className="max-w-4xl mx-auto text-center">
+        {/* Animated 404 Text */}
+        <div className="relative mb-8">
+          <div className="text-8xl md:text-9xl font-bold text-primary/20 leading-none select-none animate-pulse">
+            404
+          </div>
+        </div>
+
+        {/* Error Message */}
+        <div className="mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-neutral mb-4">
+            Oops! Page Not Found
+          </h1>
+          <p className="text-lg text-secondary mb-2">
+            The page you're looking for seems to have wandered off into the
+            digital void.
+          </p>
+        </div>
+
+        {/* Auto Redirect Notice */}
+        <div className="bg-base-100 rounded-2xl p-6 mb-8 border border-base-300 shadow-md">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="loading loading-spinner loading-sm text-primary"></div>
+            <span className="text-neutral font-medium">
+              Redirecting to homepage in {countdown} seconds
+            </span>
+          </div>
+          <button
+            onClick={() => navigate("/")}
+            className="btn btn-primary btn-sm"
+          >
+            Go Now
+          </button>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-8 text-center">
+          <p className="text-sm text-secondary">
+            Error Code: 404 | AssetVerse HR Management System
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

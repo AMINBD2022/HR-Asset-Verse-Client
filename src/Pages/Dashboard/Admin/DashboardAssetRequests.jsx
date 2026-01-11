@@ -11,16 +11,12 @@ import {
   LineChart,
   Line,
 } from "recharts";
-import DashboardLayout from "../Layouts/DashboardLayout";
-import useAuth from "../hooks/useAuth";
-import useRole from "../hooks/useRole";
+import useRole from "../../../hooks/useRole";
 
 const DashboardAssetRequests = () => {
-  const { user } = useAuth();
   const { role } = useRole();
 
   // Log user info for debugging
-  console.log("Dashboard user:", user?.email, "Role:", role);
 
   // Sample data for asset requests over time
   const requestsTrendData = [

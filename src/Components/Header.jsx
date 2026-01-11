@@ -12,19 +12,19 @@ const Header = () => {
   const { role, roleLoading } = useRole();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Public links - Show when not logged in
-  const publicLinks = [
-    { label: "Home", href: "/" },
-    { label: "Join as Employee", href: "/register" },
-    { label: "Join HR Manager", href: "/join-hr" },
-  ];
+  // // Public links - Show when not logged in
+  // const publicLinks = [
+  //   { label: "Home", href: "/" },
+  //   { label: "Blog", href: "/blog" },
+  //   { label: "Join as Employee", href: "/register" },
+  //   { label: "Join HR Manager", href: "/register" },
+  // ];
 
   // Employee menu - Only for employees
   const employeeMenu = [
     { label: "My Assets", href: "/my-assets" },
     { label: "Request Asset", href: "/request-asset" },
     { label: "My Team", href: "/my-team" },
-    { label: "Profile", href: "/employeeProfile" },
   ];
 
   // HR menu - Only for HR
@@ -42,6 +42,14 @@ const Header = () => {
     // { label: "Asset Requests", href: "/dashboard/asset-requests" },
     // { label: "Approvals", href: "/dashboard/approvals" },
     { label: "Profile", href: "/dashboard/profile" },
+  ];
+
+  // Employee dashboard menu items for employee users
+  const employeeDashboardMenu = [
+    { label: "Dashboard", href: "/employee-dashboard" },
+    // { label: "My Requests", href: "/employee-dashboard/requests" },
+    // { label: "Approved Assets", href: "/employee-dashboard/approved-assets" },
+    { label: "Profile", href: "/employee-dashboard/profile" },
   ];
 
   const handleLogOut = async () => {
@@ -75,20 +83,30 @@ const Header = () => {
 
   // Get center navigation menu based on user role
   const getCenterNavMenu = () => {
+    // Always show Home and Blog for everyone
+    const publicItems = [
+      { label: "Home", href: "/" },
+      { label: "Blog", href: "/blog" },
+    ];
+
     if (!user) {
       // Show public links when not logged in
-      return publicLinks;
+      return [
+        ...publicItems,
+        // { label: "Join as Employee", href: "/register" },
+        { label: "Register", href: "/register" },
+      ];
     }
 
-    // When logged in, show role-specific items only
+    // When logged in, show Home + Blog + role-specific items
     if (role === "employee") {
-      return employeeMenu;
+      return [...publicItems, ...employeeMenu];
     } else if (role === "Hr" || role === "hr") {
-      return hrMenu;
+      return [...publicItems, ...hrMenu];
     }
 
     // Fallback - show public links if role is not determined yet
-    return publicLinks;
+    return publicItems;
   };
 
   const centerNavMenu = getCenterNavMenu();
@@ -192,6 +210,18 @@ const Header = () => {
                 {user && (role === "Hr" || role === "hr") && (
                   <>
                     {dashboardMenu.map((item) => (
+                      <li key={item.href}>
+                        <CustomLink link={item} />
+                      </li>
+                    ))}
+                    <div className="divider my-2"></div>
+                  </>
+                )}
+
+                {/* Employee Dashboard Section - Only for Employee users */}
+                {user && role === "employee" && (
+                  <>
+                    {employeeDashboardMenu.map((item) => (
                       <li key={item.href}>
                         <CustomLink link={item} />
                       </li>

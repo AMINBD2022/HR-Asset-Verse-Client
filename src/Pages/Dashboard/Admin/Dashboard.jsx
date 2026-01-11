@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
-import useAuth from "../hooks/useAuth";
-import useRole from "../hooks/useRole";
-import useaxiosPublic from "../hooks/useAxiosPublic";
+import useAuth from "../../../hooks/useAuth";
+import useRole from "../../../hooks/useRole";
+import useaxiosPublic from "../../../hooks/useAxiosPublic";
 
 const Dashboard = () => {
   const { user } = useAuth();

@@ -15,17 +15,11 @@ import {
   AreaChart,
   Area,
 } from "recharts";
-import useAuth from "../hooks/useAuth";
-import useRole from "../hooks/useRole";
-import Swal from "sweetalert2";
 
 const DashboardApprovals = () => {
-  const { user } = useAuth();
-  const { role } = useRole();
   const [selectedFilter, setSelectedFilter] = useState("all");
 
   // Use user and role for conditional rendering and access control
-  console.log("Current user:", user?.email, "Role:", role);
 
   // Sample data for approval metrics
   const approvalMetricsData = [

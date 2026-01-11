@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoMdClose } from "react-icons/io";
@@ -13,21 +13,32 @@ import {
   FiCalendar,
   FiCamera,
   FiUser,
+  FiMapPin,
 } from "react-icons/fi";
-import useaxiosPublic from "../hooks/useAxiosPublic";
+import useaxiosPublic from "../../../hooks/useAxiosPublic";
+import EmployeeDashboardLayout from "../../../Layouts/EmployeeDashboardLayout";
 
-const DashboardProfile = () => {
+const EmployeeDashboardProfile = () => {
   const { user, profileUpdate } = useAuth();
   const modalRef = useRef();
   const axiosURL = useaxiosPublic();
   const { register, handleSubmit } = useForm();
   const [loading, setLoading] = useState(false);
 
-  const { data: hrData = {}, refetch } = useQuery({
-    queryKey: ["hrData", user?.email],
+  const { data: employeeData = {}, refetch } = useQuery({
+    queryKey: ["employeeData", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axiosURL.get(`/users/${user?.email}`);
+      return res.data;
+    },
+  });
+
+  const { data: employeeCompanies = [] } = useQuery({
+    queryKey: ["employeeCompanies", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosURL.get(`/employees?employeeEmail=${user.email}`);
       return res.data;
     },
   });
@@ -53,7 +64,6 @@ const DashboardProfile = () => {
         displayName: data.name,
         photoURL: photoURL,
       });
-
       await axiosURL.patch(`/users/${user.email}`, {
         name: data.name,
         photoURL: photoURL,
@@ -127,13 +137,13 @@ const DashboardProfile = () => {
 
             <div className="flex-1 text-center md:text-left pt-4">
               <h2 className="text-2xl font-bold text-neutral mb-2">
-                {user?.displayName || "HR Manager"}
+                {user?.displayName || "Employee"}
               </h2>
               <p className="text-secondary font-medium flex items-center justify-center md:justify-start gap-2 mb-1">
                 <FiBriefcase className="text-primary" />
-                {hrData?.companyName || "AssetVerse HR"}
+                AssetVerse Team Member
               </p>
-              <p className="text-sm text-secondary">HR Administrator</p>
+              <p className="text-sm text-secondary">Employee</p>
             </div>
           </div>
 
@@ -165,7 +175,7 @@ const DashboardProfile = () => {
                     Phone Number
                   </p>
                   <p className="text-neutral font-semibold">
-                    {hrData?.phoneNumber || "Not Provided"}
+                    {employeeData?.phoneNumber || "Not Provided"}
                   </p>
                 </div>
               </div>
@@ -181,11 +191,14 @@ const DashboardProfile = () => {
                     Member Since
                   </p>
                   <p className="text-neutral font-semibold">
-                    {hrData?.createdAt
-                      ? new Date(hrData.createdAt).toLocaleDateString("en-US", {
-                          month: "long",
-                          year: "numeric",
-                        })
+                    {employeeData?.createdAt
+                      ? new Date(employeeData.createdAt).toLocaleDateString(
+                          "en-US",
+                          {
+                            month: "long",
+                            year: "numeric",
+                          }
+                        )
                       : "Recently"}
                   </p>
                 </div>
@@ -193,7 +206,32 @@ const DashboardProfile = () => {
             </div>
           </div>
 
-          {/* Additional Info Section */}
+          {/* Company Affiliations */}
+          <div className="mt-8 bg-base-200 rounded-xl p-6 border border-base-300">
+            <h3 className="text-lg font-semibold text-neutral mb-4 flex items-center gap-2">
+              <FiMapPin className="text-primary" />
+              Company Affiliations
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              {employeeCompanies.length > 0 ? (
+                employeeCompanies.map((company, index) => (
+                  <div
+                    key={index}
+                    className="bg-primary/10 text-primary px-4 py-2 rounded-lg border border-primary/20"
+                  >
+                    <div className="font-semibold">{company.companyName}</div>
+                    <div className="text-xs opacity-80">Active Member</div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-secondary italic">
+                  No company affiliations yet
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Account Information */}
           <div className="mt-8 bg-base-200 rounded-xl p-6 border border-base-300">
             <h3 className="text-lg font-semibold text-neutral mb-4">
               Account Information
@@ -203,15 +241,13 @@ const DashboardProfile = () => {
                 <p className="text-sm text-secondary font-medium mb-1">
                   Account Type
                 </p>
-                <p className="text-neutral font-semibold">HR Administrator</p>
+                <p className="text-neutral font-semibold">Employee</p>
               </div>
               <div>
                 <p className="text-sm text-secondary font-medium mb-1">
-                  Company
+                  Status
                 </p>
-                <p className="text-neutral font-semibold">
-                  {hrData?.companyName || "AssetVerse"}
-                </p>
+                <span className="badge badge-success">Active</span>
               </div>
               <div>
                 <p className="text-sm text-secondary font-medium mb-1">
@@ -227,9 +263,11 @@ const DashboardProfile = () => {
               </div>
               <div>
                 <p className="text-sm text-secondary font-medium mb-1">
-                  Status
+                  Companies
                 </p>
-                <span className="badge badge-success">Active</span>
+                <p className="text-neutral font-semibold">
+                  {employeeCompanies.length} Active
+                </p>
               </div>
             </div>
           </div>
@@ -276,7 +314,7 @@ const DashboardProfile = () => {
               <input
                 {...register("phoneNumber")}
                 type="tel"
-                defaultValue={hrData?.phoneNumber}
+                defaultValue={employeeData?.phoneNumber}
                 className="input input-bordered w-full bg-base-200 focus:bg-base-100"
                 placeholder="Enter your phone number"
               />
@@ -335,4 +373,4 @@ const DashboardProfile = () => {
   );
 };
 
-export default DashboardProfile;
+export default EmployeeDashboardProfile;

@@ -3,47 +3,46 @@ import { Link, useLocation, Navigate, Outlet } from "react-router";
 import {
   IoMdHome,
   IoMdDocument,
-  IoMdCheckboxOutline,
   IoMdMenu,
   IoMdClose,
   IoMdArrowBack,
   IoMdPerson,
+  IoMdCheckboxOutline,
 } from "react-icons/io";
 import useAuth from "../hooks/useAuth";
 import useRole from "../hooks/useRole";
 import Loading from "../Components/Loading";
-import DashboardHeader from "../Components/DashboardHeader";
 import RouteLoader from "../Components/RouteLoader";
 
-const DashboardLayout = () => {
+const EmployeeDashboardLayout = () => {
   const { user, isLoading } = useAuth();
   const { role, roleLoading } = useRole();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
 
-  // Dashboard navigation items
+  // Employee dashboard navigation items
   const dashboardNavItems = [
     {
       name: "Overview",
-      href: "/dashboard",
+      href: "/employee-dashboard",
       icon: IoMdHome,
       description: "Dashboard overview and statistics",
     },
     {
-      name: "Asset Requests",
-      href: "/dashboard/asset-requests",
+      name: "My Requests",
+      href: "/employee-dashboard/requests",
       icon: IoMdDocument,
-      description: "Track and analyze asset requests",
+      description: "View your asset requests status",
     },
     {
-      name: "Approvals",
-      href: "/dashboard/approvals",
+      name: "Approved Assets",
+      href: "/employee-dashboard/approved-assets",
       icon: IoMdCheckboxOutline,
-      description: "Manage pending approvals",
+      description: "View your approved assets",
     },
     {
       name: "Profile",
-      href: "/dashboard/profile",
+      href: "/employee-dashboard/profile",
       icon: IoMdPerson,
       description: "Manage your profile settings",
     },
@@ -62,8 +61,8 @@ const DashboardLayout = () => {
     return <Loading />;
   }
 
-  // Redirect non-HR users
-  if (!user || (role !== "Hr" && role !== "hr")) {
+  // Redirect non-employee users
+  if (!user || role !== "employee") {
     return <Navigate to="/" replace />;
   }
 
@@ -72,12 +71,9 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="bg-base-200">
+    <div className="min-h-screen bg-base-200">
       <RouteLoader />
-      {/* Dashboard Header */}
-      {/* <DashboardHeader /> */}
       {/* Mobile Header */}
-
       <div className="lg:hidden bg-base-300 border-b border-base-200 p-4">
         <div className="flex items-center justify-between">
           <button
@@ -91,10 +87,10 @@ const DashboardLayout = () => {
               <IoMdMenu className="h-6 w-6" />
             )}
           </button>
-          <h1 className="text-xl font-bold text-neutral">
-            <Link to="/">Back To Home</Link>
-          </h1>
-          <div></div> {/* Spacer */}
+          <h1 className="text-xl font-bold text-neutral">Dashboard</h1>
+          <div>
+            <Link to="/">Home</Link>
+          </div>
         </div>
       </div>
 
@@ -116,8 +112,8 @@ const DashboardLayout = () => {
               <h1 className="text-2xl font-bold text-neutral">Dashboard</h1>
               <Link
                 to="/"
-                className="btn btn-ghost btn-sm tooltip tooltip-bottom"
-                data-tip="Go home"
+                className="btn btn-ghost btn-sm"
+                aria-label="Back to main site"
               >
                 <IoMdArrowBack className="h-4 w-4" />
               </Link>
@@ -172,9 +168,9 @@ const DashboardLayout = () => {
           <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6 border-t border-base-200">
             <div className="text-center">
               <p className="text-xs text-secondary">
-                HR Asset Management System
+                AssetVerse Employee Portal
               </p>
-              <p className="text-xs text-secondary mt-1">Dashboard v1.0</p>
+              <p className="text-xs text-secondary mt-1">v1.0</p>
             </div>
           </div>
         </aside>
@@ -199,4 +195,4 @@ const DashboardLayout = () => {
   );
 };
 
-export default DashboardLayout;
+export default EmployeeDashboardLayout;

@@ -1,65 +1,36 @@
-import React from "react";
-import styled from "styled-components";
+import { useEffect, useState } from "react";
 
 const PageLoader = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate initial page load
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!isLoading) return null;
+
   return (
-    <StyledWrapper className="flex justify-center items-center min-h-screen">
-      <div className="custom-loader" />
-    </StyledWrapper>
+    <div className="fixed inset-0 z-50 bg-base-100 flex items-center justify-center">
+      <div className="text-center">
+        <div className="mb-8">
+          <img
+            src="/logo.png"
+            alt="AssetVerse"
+            className="w-20 h-20 mx-auto mb-4 animate-pulse"
+          />
+          <h1 className="text-3xl font-bold text-primary mb-2">AssetVerse</h1>
+          <p className="text-secondary">HR Management</p>
+        </div>
+        <div className="loading loading-spinner loading-lg text-primary"></div>
+        <p className="text-neutral mt-4 font-medium">Loading Application...</p>
+      </div>
+    </div>
   );
 };
-
-const StyledWrapper = styled.div`
-  .custom-loader {
-    width: 70px;
-    height: 70px;
-    background: #ffa600;
-    border-radius: 50px;
-    -webkit-mask: radial-gradient(
-          circle 31px at 50% calc(100% + 13px),
-          #000 95%,
-          #0000
-        )
-        top 4px left 50%,
-      radial-gradient(circle 31px, #000 95%, #0000) center,
-      radial-gradient(circle 31px at 50% -13px, #000 95%, #0000) bottom 4px left
-        50%,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    -webkit-mask-repeat: no-repeat;
-    animation: cu10 1.5s infinite;
-  }
-
-  @keyframes cu10 {
-    0% {
-      -webkit-mask-size: 0 18px, 0 18px, 0 18px, auto;
-    }
-
-    16.67% {
-      -webkit-mask-size: 100% 18px, 0 18px, 0 18px, auto;
-    }
-
-    33.33% {
-      -webkit-mask-size: 100% 18px, 100% 18px, 0 18px, auto;
-    }
-
-    50% {
-      -webkit-mask-size: 100% 18px, 100% 18px, 100% 18px, auto;
-    }
-
-    66.67% {
-      -webkit-mask-size: 0 18px, 100% 18px, 100% 18px, auto;
-    }
-
-    83.33% {
-      -webkit-mask-size: 0 18px, 0 18px, 100% 18px, auto;
-    }
-
-    100% {
-      -webkit-mask-size: 0 18px, 0 18px, 0 18px, auto;
-    }
-  }
-`;
 
 export default PageLoader;
