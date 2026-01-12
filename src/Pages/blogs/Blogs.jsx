@@ -1,7 +1,16 @@
+import { useState } from "react";
 import { Link } from "react-router";
 import { FiCalendar, FiUser, FiClock, FiArrowRight } from "react-icons/fi";
+import useAOS from "../../hooks/useAOS";
+import { pageAnimations } from "../../utils/aosAnimations";
 
-const Blog = () => {
+const Blogs = () => {
+  const [showAll, setShowAll] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Initialize AOS for this page
+  useAOS();
+
   // 20 dummy blog posts
   const blogPosts = [
     {
@@ -266,11 +275,40 @@ const Blog = () => {
     },
   ];
 
+  // Show only first 12 posts initially, or all if showAll is true
+  const postsToShow = showAll ? blogPosts : blogPosts.slice(0, 12);
+  const hasMorePosts = blogPosts.length > 12;
+
+  const handleLoadMore = () => {
+    setIsLoading(true);
+
+    // Simulate loading time for better UX
+    setTimeout(() => {
+      setShowAll(true);
+      setIsLoading(false);
+
+      // Smooth scroll to show the newly loaded posts
+      setTimeout(() => {
+        const newPostsSection = document.querySelector(".grid");
+        if (newPostsSection) {
+          const firstNewPost = newPostsSection.children[12]; // 13th post (index 12)
+          if (firstNewPost) {
+            firstNewPost.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+              inline: "nearest",
+            });
+          }
+        }
+      }, 100);
+    }, 800); // 800ms loading simulation
+  };
+
   return (
     <div className="min-h-screen bg-base-200 py-12 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-12" {...pageAnimations.blog.title}>
           <h1 className="text-4xl md:text-5xl font-bold text-neutral mb-4">
             AssetVerse Blog
           </h1>
@@ -282,10 +320,18 @@ const Blog = () => {
 
         {/* Blog Posts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogPosts.map((post) => (
+          {postsToShow.map((post, index) => (
             <article
               key={post.id}
-              className="bg-base-100 rounded-2xl shadow-md border border-base-300 overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              className={`bg-base-100 rounded-2xl shadow-md border border-base-300 overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105 ${
+                showAll && index >= 12 ? "animate-fade-in-up" : ""
+              }`}
+              style={
+                showAll && index >= 12
+                  ? { animationDelay: `${(index - 12) * 100}ms` }
+                  : {}
+              }
+              {...pageAnimations.blog.card(index)}
             >
               {/* Post Image */}
               <div className="relative h-48 overflow-hidden">
@@ -304,7 +350,7 @@ const Blog = () => {
               {/* Post Content */}
               <div className="p-6">
                 <h2 className="text-xl font-bold text-neutral mb-3 line-clamp-2 hover:text-primary transition-colors">
-                  <Link to={`/blog/${post.id}`}>{post.title}</Link>
+                  <Link to={`/blogs/${post.id}`}>{post.title}</Link>
                 </h2>
 
                 <p className="text-secondary mb-4 line-clamp-3">
@@ -348,7 +394,7 @@ const Blog = () => {
 
                 {/* Read More Button */}
                 <Link
-                  to={`/blog/${post.id}`}
+                  to={`/blogs/${post.id}`}
                   className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
                 >
                   Read More
@@ -359,13 +405,51 @@ const Blog = () => {
           ))}
         </div>
 
-        {/* Load More Button (for future pagination) */}
-        <div className="text-center mt-12">
-          <button className="btn btn-primary btn-lg">Load More Posts</button>
-        </div>
+        {/* Load More Button */}
+        {hasMorePosts && !showAll && (
+          <div className="text-center mt-12" {...pageAnimations.blog.loadMore}>
+            <button
+              onClick={handleLoadMore}
+              disabled={isLoading}
+              className="btn btn-primary btn-lg px-8 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-70"
+            >
+              {isLoading ? (
+                <>
+                  <span className="loading loading-spinner loading-sm mr-2"></span>
+                  Loading More Posts...
+                </>
+              ) : (
+                <>
+                  Load More Posts
+                  <span className="ml-2 bg-primary-content text-primary rounded-full px-2 py-1 text-sm font-bold">
+                    +{blogPosts.length - 12}
+                  </span>
+                </>
+              )}
+            </button>
+          </div>
+        )}
+
+        {/* Show total count when all posts are visible */}
+        {showAll && (
+          <div className="text-center mt-12">
+            <div className="bg-base-100 rounded-lg p-6 shadow-sm border border-base-300 inline-block">
+              <p className="text-secondary">
+                Showing all{" "}
+                <span className="font-bold text-primary">
+                  {blogPosts.length}
+                </span>{" "}
+                blog posts
+              </p>
+              <p className="text-sm text-secondary/70 mt-1">
+                Stay tuned for more insights and updates!
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default Blog;
+export default Blogs;

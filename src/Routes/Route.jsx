@@ -7,7 +7,6 @@ import AddAsset from "../Pages/AddAsset/AddAsset";
 import AllAsset from "../Pages/AssetListPage/AllAsset";
 import MyTeam from "../Pages/MyTeam/MyTeam";
 import EmployeeRoute from "./EmployeeRoute";
-import UnifiedRegister from "../Pages/UnifiedRegister";
 import MyAssets from "../Pages/MyAssets/MyAssets";
 import PaymentSuccess from "../Pages/paymentSuccess/payment-success";
 import Login from "../Pages/Login/Login";
@@ -17,8 +16,6 @@ import UpgradePackage from "../Pages/UpgradePackage/UpgradePackage";
 import Testimonial from "../Pages/Testimonial/Testimonial";
 import Employees from "../Pages/Employees/Employees";
 import DashboardLayout from "../Layouts/DashboardLayout";
-import Blog from "../Pages/Blog";
-import BlogPost from "../Pages/BlogPost";
 import EmployeeDashboardLayout from "../Layouts/EmployeeDashboardLayout";
 import EmployeeDashboard from "../Pages/Dashboard/Employee/EmployeeDashboard";
 import EmployeeDashboardRequests from "../Pages/Dashboard/Employee/EmployeeDashboardRequests";
@@ -28,6 +25,9 @@ import Dashboard from "../Pages/Dashboard/Admin/Dashboard";
 import DashboardAssetRequests from "../Pages/Dashboard/Admin/DashboardAssetRequests";
 import DashboardApprovals from "../Pages/Dashboard/Admin/DashboardApprovals";
 import DashboardProfile from "../Pages/Dashboard/Admin/DashboardProfile";
+import Register from "../Pages/Register";
+import Blogs from "../Pages/blogs/Blogs";
+import SingleBlog from "../Pages/blogs/SingleBlog";
 
 const router = createBrowserRouter([
   {
@@ -36,12 +36,12 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       {
-        path: "/blog",
-        element: <Blog />,
+        path: "/blogs",
+        element: <Blogs />,
       },
       {
-        path: "/blog/:id",
-        element: <BlogPost />,
+        path: "/blogs/:id",
+        element: <SingleBlog />,
       },
       {
         path: "/testimonial",
@@ -119,7 +119,7 @@ const router = createBrowserRouter([
       },
       {
         path: "register",
-        element: <UnifiedRegister />,
+        element: <Register />,
       },
       {
         path: "/payment-success",
@@ -166,27 +166,15 @@ const router = createBrowserRouter([
       { index: true, element: <EmployeeDashboard /> },
       {
         path: "/employee-dashboard/requests",
-        element: (
-          <EmployeeRoute>
-            <EmployeeDashboardRequests />
-          </EmployeeRoute>
-        ),
+        element: <EmployeeDashboardRequests />,
       },
       {
         path: "/employee-dashboard/profile",
-        element: (
-          <EmployeeRoute>
-            <EmployeeDashboardProfile />
-          </EmployeeRoute>
-        ),
+        element: <EmployeeDashboardProfile />,
       },
       {
         path: "/employee-dashboard/approved-assets",
-        element: (
-          <EmployeeRoute>
-            <EmployeeApprovedAssets />
-          </EmployeeRoute>
-        ),
+        element: <EmployeeApprovedAssets />,
       },
     ],
   },

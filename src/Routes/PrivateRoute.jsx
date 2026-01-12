@@ -5,13 +5,17 @@ import useRole from "../hooks/useRole";
 import Loading from "../Components/Loading";
 
 const PrivateRoute = ({ children }) => {
-  const { user, isLoading } = useAuth();
-  const location = useLocation();
+  const { user, loading } = useAuth();
   const { roleLoading } = useRole();
-  if (isLoading || roleLoading) {
+  const location = useLocation();
+
+  if (loading || roleLoading) {
     return <Loading />;
   }
-  if (!user) return <Navigate state={location.pathname} to="/login"></Navigate>;
+
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
 
   return children;
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import PageLoader from "../Components/PageLoader";
@@ -12,13 +12,25 @@ const RootLayout = () => {
     return localStorage.getItem("theme") || "light";
   });
 
-  const { isLoading } = useAuth();
+  const { loading, user } = useAuth();
   const { roleLoading } = useRole();
+  const location = useLocation();
+
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
-  if (isLoading || roleLoading) {
+  // Define public routes that don't need role loading
+  const publicRoutes = ["/", "/home", "/blog", "/login", "/register"];
+  const isPublicRoute =
+    publicRoutes.includes(location.pathname) ||
+    location.pathname.startsWith("/blog/");
+
+  // For public routes, only wait for auth loading
+  // For protected routes, wait for both auth and role loading
+  const shouldShowLoader = loading || (!isPublicRoute && user && roleLoading);
+
+  if (shouldShowLoader) {
     return <PageLoader />;
   }
 
@@ -38,7 +50,7 @@ const RootLayout = () => {
         onClick={ThemeToggle}
         className="fixed bottom-6 right-6 btn btn-accent rounded-full text-white z-10"
       >
-        {theme === "light" ? "Dark Mode" : "Light Mode"}
+        {theme === "light" ? "Dark" : "Light"}
       </button>
     </div>
   );

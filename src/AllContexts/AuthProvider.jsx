@@ -11,7 +11,7 @@ import { auth } from "../firebase/fitebase.config";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   // user Register login logOut Function
 
@@ -35,7 +35,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      setIsLoading(false);
+      setLoading(false);
     });
     return () => {
       unsubscribe();
@@ -47,8 +47,8 @@ const AuthProvider = ({ children }) => {
     profileUpdate,
     logOutUser,
     user,
-    isLoading,
-    setIsLoading,
+    loading,
+    setLoading,
   };
 
   return (

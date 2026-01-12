@@ -4,10 +4,15 @@ import useAuth from "../../hooks/useAuth";
 import Title from "../../Utilities/Title";
 import Container from "../../Components/Container";
 import useaxiosPublic from "../../hooks/useAxiosPublic";
+import useAOS from "../../hooks/useAOS";
+import { pageAnimations } from "../../utils/aosAnimations";
 
 const AllRequests = () => {
   const { user } = useAuth();
   const axiosURL = useaxiosPublic();
+
+  // Initialize AOS
+  useAOS();
 
   const {
     data: requests = [],
@@ -21,59 +26,77 @@ const AllRequests = () => {
     },
   });
 
-  if (isLoading) return <p className="text-center">Loading Requests...</p>;
+  if (isLoading)
+    return (
+      <div
+        className="text-center py-12"
+        data-aos="fade-in"
+        data-aos-duration="600"
+      >
+        <div className="loading loading-spinner loading-lg text-primary"></div>
+        <p className="mt-4 text-secondary">Loading Requests...</p>
+      </div>
+    );
 
   // Reject Request (Delete API)
   const handleReject = async (req) => {
-    Swal.fire({
+    const result = await Swal.fire({
       title: "Are you sure?",
       text: "This request will be permanently deleted!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, Delete!",
       cancelButtonText: "Cancel",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const res = await axiosURL.delete(`/asset-requests/${req._id}`);
-
-        if (res.data.deletedCount > 0) {
-          Swal.fire("Deleted!", "Request removed successfully", "success");
-          refetch();
-        }
-      }
     });
+    if (result.isConfirmed) {
+      const res = await axiosURL.delete(`/asset-requests/${req._id}`);
+
+      if (res.data.deletedCount > 0) {
+        Swal.fire("Deleted!", "Request removed successfully", "success");
+        refetch();
+      }
+    }
   };
 
   const handleApprove = async (req) => {
     console.log(req);
-
-    const assignedData = {
-      assetId: req.assetId,
-      assetName: req.assetName,
-      requesterEmail: req.requesterEmail,
-      assetImage: req.assetImage,
-      assetType: req.assetType,
-      employeeEmail: req.requesterEmail,
-      employeeName: req.requesterName,
-      employeePhoto: req.employeePhoto,
-      hrEmail: req.hrEmail,
-      companyName: req.companyName,
-    };
-    const res = await axiosURL.post(
-      `/approve-request/${req._id}`,
-      assignedData
-    );
-    if (res.data.needUpgrade) {
-      Swal.fire({
-        icon: "error",
-        title: "Package Limit Finished!",
-        text: "Please upgrade your subscription plan to approve more employees.",
-      });
-      return;
-    }
-    if (res.data.success) {
-      Swal.fire("Approved!", "Request approved successfully", "success");
-      refetch();
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You want to Approve this request ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Approve!",
+      cancelButtonText: "Cancel",
+    });
+    if (result.isConfirmed) {
+      const assignedData = {
+        assetId: req.assetId,
+        assetName: req.assetName,
+        requesterEmail: req.requesterEmail,
+        assetImage: req.assetImage,
+        assetType: req.assetType,
+        employeeEmail: req.requesterEmail,
+        employeeName: req.requesterName,
+        employeePhoto: req.employeePhoto,
+        hrEmail: req.hrEmail,
+        companyName: req.companyName,
+      };
+      const res = await axiosURL.post(
+        `/approve-request/${req._id}`,
+        assignedData
+      );
+      if (res.data.needUpgrade) {
+        Swal.fire({
+          icon: "error",
+          title: "Package Limit Finished!",
+          text: "Please upgrade your subscription plan to approve more employees.",
+        });
+        return;
+      }
+      if (res.data.success) {
+        Swal.fire("Approved!", "Request approved successfully", "success");
+        refetch();
+      }
     }
   };
   return (

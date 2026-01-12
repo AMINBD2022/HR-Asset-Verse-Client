@@ -2,8 +2,12 @@ import React from "react";
 import Title from "../Utilities/Title";
 import Container from "./Container";
 import SubTitle from "../Utilities/SubTitle";
+import useAOS from "../hooks/useAOS";
 
 const FAQSection = () => {
+  // Initialize AOS
+  useAOS();
+
   const FAQS = [
     {
       question: "What is AssetVerse?",
@@ -33,8 +37,12 @@ const FAQSection = () => {
   ];
   return (
     <Container>
-      <div className="mx-auto max-w-5xl ">
-        <div className="text-center">
+      <div className="mx-auto max-w-5xl">
+        <div
+          className="text-center"
+          data-aos="fade-down"
+          data-aos-duration="800"
+        >
           <Title normal={"Frequently Asked"} color={"Questions"} />
           <SubTitle>
             Find answers to the most common questions about AssetVerse.
@@ -45,6 +53,9 @@ const FAQSection = () => {
             <div
               key={index}
               className="collapse collapse-arrow bg-base-100 border border-base-300"
+              data-aos="fade-up"
+              data-aos-duration="600"
+              data-aos-delay={`${index * 100}`}
             >
               <input type="radio" name="my-accordion-2" />
               <div className="collapse-title font-semibold">{faq.question}</div>

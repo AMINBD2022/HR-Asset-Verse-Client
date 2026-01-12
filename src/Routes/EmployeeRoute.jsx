@@ -1,21 +1,23 @@
 import useAuth from "../hooks/useAuth";
-import { Navigate } from "react-router";
+import { Navigate, useLocation } from "react-router";
 import useRole from "../hooks/useRole";
 import Loading from "../Components/Loading";
 
 const EmployeeRoute = ({ children }) => {
-  const { user, isLoading } = useAuth();
+  const { user, loading } = useAuth();
   const { role, roleLoading } = useRole();
+  const location = useLocation();
 
-  if (isLoading || roleLoading) {
+  if (loading || roleLoading) {
     return <Loading />;
   }
+
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   if (role !== "employee") {
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   return children;

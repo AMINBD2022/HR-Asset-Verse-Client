@@ -29,23 +29,26 @@ const AllAsset = () => {
   });
 
   const handleDeleteAsset = async (id) => {
-    Swal.fire({
+    const result = await Swal.fire({
       title: "Are you sure?",
       text: "This Asset will be permanently deleted!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, Delete!",
       cancelButtonText: "Cancel",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
+    });
+    if (result.isConfirmed) {
+      try {
         const res = await axiosURL.delete(`/assets/${id}`);
 
         if (res.data.deletedCount > 0) {
           Swal.fire("Deleted!", "Request removed successfully", "success");
           refetch();
         }
+      } catch (err) {
+        Swal.fire(`"Error!", "Failed to delete asset", "err" ${err}`);
       }
-    });
+    }
   };
   const handleOpenModal = (item) => {
     modalRef.current.showModal();

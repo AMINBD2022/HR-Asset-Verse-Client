@@ -15,7 +15,7 @@ import Loading from "../Components/Loading";
 import RouteLoader from "../Components/RouteLoader";
 
 const EmployeeDashboardLayout = () => {
-  const { user, isLoading } = useAuth();
+  const { user, loading } = useAuth();
   const { role, roleLoading } = useRole();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
@@ -57,7 +57,7 @@ const EmployeeDashboardLayout = () => {
   };
 
   // Show loading state
-  if (isLoading || roleLoading) {
+  if (loading || roleLoading) {
     return <Loading />;
   }
 

@@ -15,6 +15,7 @@ import {
   AreaChart,
   Area,
 } from "recharts";
+import Swal from "sweetalert2";
 
 const DashboardApprovals = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");

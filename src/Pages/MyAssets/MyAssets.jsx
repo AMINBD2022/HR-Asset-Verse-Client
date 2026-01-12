@@ -4,6 +4,9 @@ import useAuth from "../../hooks/useAuth";
 import { motion } from "framer-motion";
 import { maskEmail } from "../../Utilities/emailMaks";
 import useaxiosPublic from "../../hooks/useAxiosPublic";
+import Container from "../../Components/Container";
+import useAOS from "../../hooks/useAOS";
+import { pageAnimations } from "../../utils/aosAnimations";
 
 const MyAssets = () => {
   const { user } = useAuth();
@@ -12,6 +15,9 @@ const MyAssets = () => {
   const limit = 10;
   const skip = page * limit;
   const [filter, setFilter] = useState("");
+
+  // Initialize AOS
+  useAOS();
 
   const { data } = useQuery({
     queryKey: ["AssignedAssets", user?.email, page, filter],
@@ -27,12 +33,20 @@ const MyAssets = () => {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="mx-auto w-11/12 py-10">
-      <div className="flex flex-col lg:flex-row gap-3 justify-between items-center my-6">
+    <Container>
+      <div
+        className="flex flex-col lg:flex-row gap-3 justify-between items-center my-6"
+        {...pageAnimations.assetManagement.header}
+      >
         <h2 className="text-2xl font-bold text-gray-800">
           Total Assigned Assets {data?.total}
         </h2>
-        <label className="input">
+        <label
+          className="input"
+          data-aos="fade-left"
+          data-aos-duration="600"
+          data-aos-delay="200"
+        >
           <input type="search" required placeholder="Search" />
         </label>
         <select
@@ -42,6 +56,9 @@ const MyAssets = () => {
             setFilter(e.target.value);
           }}
           className="select"
+          data-aos="fade-left"
+          data-aos-duration="600"
+          data-aos-delay="300"
         >
           <option value="">All Assets</option>
           <option value="Non-returnable">Non-returnable</option>
@@ -49,7 +66,10 @@ const MyAssets = () => {
         </select>
       </div>
 
-      <div className="overflow-x-auto shadow rounded-lg">
+      <div
+        className="overflow-x-auto shadow rounded-lg"
+        {...pageAnimations.assetManagement.table}
+      >
         <table className="table w-full">
           <thead>
             <tr>
@@ -64,14 +84,9 @@ const MyAssets = () => {
 
           <tbody>
             {data?.result?.map((item, index) => (
-              <motion.tr
+              <tr
+                {...pageAnimations.assetManagement.row(index)}
                 key={item._id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.6,
-                  delay: index * 0.08,
-                }}
                 className="hover:bg-gray-50"
               >
                 <td>{index + 1}</td>
@@ -85,27 +100,30 @@ const MyAssets = () => {
                   <span>{item.assetName}</span>
                 </td>
 
-                <td>{maskEmail(item.processedBy)}</td>
+                <td>{maskEmail(item.hrEmail)}</td>
                 <td>{item.companyName}</td>
-                <td>{new Date(item.assignmentDate).toLocaleString()}</td>
+                <td>{new Date(item.assignmentDate).toLocaleDateString()}</td>
                 <td>
                   {" "}
                   {item.assetType === "Returnable" ? (
-                    <button className="btn btn-secondary">Return Asset</button>
+                    <button className="btn btn-secondary">Returnable</button>
                   ) : (
-                    <button className="btn btn-secondary btn-disabled">
-                      Non Return
-                    </button>
+                    <button className="btn btn-disabled">Non Return</button>
                   )}
                 </td>
-              </motion.tr>
+              </tr>
             ))}
           </tbody>
         </table>
       </div>
 
       {/* --------------------------Pagination for ---------------------- */}
-      <div className="text-center mt-5 space-x-2">
+      <div
+        className="text-center mt-5 space-x-2"
+        data-aos="fade-up"
+        data-aos-duration="600"
+        data-aos-delay="400"
+      >
         <button
           className="btn"
           disabled={page === 0}
@@ -118,6 +136,9 @@ const MyAssets = () => {
             key={i}
             onClick={() => setPage(i)}
             className={`btn ${page === i ? "btn-secondary" : ""}`}
+            data-aos="zoom-in"
+            data-aos-duration="400"
+            data-aos-delay={`${500 + i * 50}`}
           >
             {i + 1}
           </button>
@@ -130,7 +151,7 @@ const MyAssets = () => {
           Next
         </button>
       </div>
-    </div>
+    </Container>
   );
 };
 

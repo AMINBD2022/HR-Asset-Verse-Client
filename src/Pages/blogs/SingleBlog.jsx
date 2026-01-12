@@ -7,9 +7,13 @@ import {
   FiShare2,
   FiBookmark,
 } from "react-icons/fi";
+import useAOS from "../../hooks/useAOS";
 
-const BlogPost = () => {
+const SingleBlog = () => {
   const { id } = useParams();
+
+  // Initialize AOS
+  useAOS();
 
   // Same blog posts data (in a real app, this would come from an API)
   const blogPosts = [
@@ -741,14 +745,14 @@ const BlogPost = () => {
   if (!post) {
     return (
       <div className="min-h-screen bg-base-200 flex items-center justify-center">
-        <div className="text-center">
+        <div className="text-center" data-aos="fade-up" data-aos-duration="800">
           <h1 className="text-4xl font-bold text-neutral mb-4">
             Post Not Found
           </h1>
           <p className="text-secondary mb-6">
             The blog post you're looking for doesn't exist.
           </p>
-          <Link to="/blog" className="btn btn-primary">
+          <Link to="/blogs" className="btn btn-primary">
             Back to Blog
           </Link>
         </div>
@@ -760,9 +764,9 @@ const BlogPost = () => {
     <div className="min-h-screen bg-base-200 py-12 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Back Button */}
-        <div className="mb-8">
+        <div className="mb-8" data-aos="fade-right" data-aos-duration="600">
           <Link
-            to="/blog"
+            to="/blogs"
             className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
           >
             <FiArrowLeft className="w-4 h-4" />
@@ -771,9 +775,19 @@ const BlogPost = () => {
         </div>
 
         {/* Article Header */}
-        <article className="bg-base-100 rounded-2xl shadow-md border border-base-300 overflow-hidden">
+        <article
+          className="bg-base-100 rounded-2xl shadow-md border border-base-300 overflow-hidden"
+          data-aos="fade-up"
+          data-aos-duration="800"
+          data-aos-delay="200"
+        >
           {/* Featured Image */}
-          <div className="relative h-64 md:h-96 overflow-hidden">
+          <div
+            className="relative h-64 md:h-96 overflow-hidden"
+            data-aos="zoom-in"
+            data-aos-duration="800"
+            data-aos-delay="400"
+          >
             <img
               src={post.image}
               alt={post.title}
@@ -789,12 +803,22 @@ const BlogPost = () => {
           {/* Article Content */}
           <div className="p-8 md:p-12">
             {/* Title */}
-            <h1 className="text-3xl md:text-4xl font-bold text-neutral mb-6 leading-tight">
+            <h1
+              className="text-3xl md:text-4xl font-bold text-neutral mb-6 leading-tight"
+              data-aos="fade-up"
+              data-aos-duration="800"
+              data-aos-delay="600"
+            >
               {post.title}
             </h1>
 
             {/* Meta Information */}
-            <div className="flex flex-wrap items-center gap-6 text-secondary mb-8 pb-8 border-b border-base-200">
+            <div
+              className="flex flex-wrap items-center gap-6 text-secondary mb-8 pb-8 border-b border-base-200"
+              data-aos="fade-up"
+              data-aos-duration="600"
+              data-aos-delay="700"
+            >
               <div className="flex items-center gap-2">
                 <FiUser className="w-5 h-5" />
                 <span className="font-medium">{post.author}</span>
@@ -816,7 +840,12 @@ const BlogPost = () => {
             </div>
 
             {/* Article Actions */}
-            <div className="flex items-center gap-4 mb-8">
+            <div
+              className="flex items-center gap-4 mb-8"
+              data-aos="fade-right"
+              data-aos-duration="600"
+              data-aos-delay="800"
+            >
               <button className="btn btn-outline btn-sm flex items-center gap-2">
                 <FiShare2 className="w-4 h-4" />
                 Share
@@ -830,17 +859,28 @@ const BlogPost = () => {
             {/* Article Body */}
             <div
               className="prose prose-lg max-w-none text-base-content"
+              data-aos="fade-up"
+              data-aos-duration="800"
+              data-aos-delay="900"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
 
             {/* Tags */}
-            <div className="mt-12 pt-8 border-t border-base-200">
+            <div
+              className="mt-12 pt-8 border-t border-base-200"
+              data-aos="fade-up"
+              data-aos-duration="600"
+              data-aos-delay="1000"
+            >
               <h3 className="text-lg font-semibold text-neutral mb-4">Tags</h3>
               <div className="flex flex-wrap gap-3">
                 {post.tags.map((tag, index) => (
                   <span
                     key={index}
                     className="bg-base-200 text-neutral px-4 py-2 rounded-full text-sm hover:bg-primary hover:text-primary-content transition-colors cursor-pointer"
+                    data-aos="fade-up"
+                    data-aos-duration="400"
+                    data-aos-delay={`${1100 + index * 100}`}
                   >
                     {tag}
                   </span>
@@ -849,7 +889,12 @@ const BlogPost = () => {
             </div>
 
             {/* Author Bio */}
-            <div className="mt-12 pt-8 border-t border-base-200">
+            <div
+              className="mt-12 pt-8 border-t border-base-200"
+              data-aos="fade-up"
+              data-aos-duration="800"
+              data-aos-delay="1200"
+            >
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
                   <FiUser className="w-8 h-8 text-primary" />
@@ -871,7 +916,12 @@ const BlogPost = () => {
         </article>
 
         {/* Related Posts */}
-        <div className="mt-12">
+        <div
+          className="mt-12"
+          data-aos="fade-up"
+          data-aos-duration="800"
+          data-aos-delay="1300"
+        >
           <h2 className="text-2xl font-bold text-neutral mb-8">
             Related Posts
           </h2>
@@ -879,11 +929,14 @@ const BlogPost = () => {
             {blogPosts
               .filter((p) => p.id !== post.id)
               .slice(0, 2)
-              .map((relatedPost) => (
+              .map((relatedPost, index) => (
                 <Link
                   key={relatedPost.id}
-                  to={`/blog/${relatedPost.id}`}
+                  to={`/blogs/${relatedPost.id}`}
                   className="bg-base-100 rounded-xl p-6 border border-base-300 hover:shadow-md transition-shadow"
+                  data-aos="fade-up"
+                  data-aos-duration="600"
+                  data-aos-delay={`${1400 + index * 150}`}
                 >
                   <h3 className="text-lg font-semibold text-neutral mb-2 hover:text-primary transition-colors">
                     {relatedPost.title}
@@ -906,4 +959,4 @@ const BlogPost = () => {
   );
 };
 
-export default BlogPost;
+export default SingleBlog;

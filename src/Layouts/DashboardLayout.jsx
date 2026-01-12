@@ -12,11 +12,10 @@ import {
 import useAuth from "../hooks/useAuth";
 import useRole from "../hooks/useRole";
 import Loading from "../Components/Loading";
-import DashboardHeader from "../Components/DashboardHeader";
 import RouteLoader from "../Components/RouteLoader";
 
 const DashboardLayout = () => {
-  const { user, isLoading } = useAuth();
+  const { user, loading } = useAuth();
   const { role, roleLoading } = useRole();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
@@ -58,7 +57,7 @@ const DashboardLayout = () => {
   };
 
   // Show loading state
-  if (isLoading || roleLoading) {
+  if (loading || roleLoading) {
     return <Loading />;
   }
 
@@ -74,8 +73,6 @@ const DashboardLayout = () => {
   return (
     <div className="bg-base-200">
       <RouteLoader />
-      {/* Dashboard Header */}
-      {/* <DashboardHeader /> */}
       {/* Mobile Header */}
 
       <div className="lg:hidden bg-base-300 border-b border-base-200 p-4">

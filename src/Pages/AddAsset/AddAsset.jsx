@@ -5,12 +5,18 @@ import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import { FiCheckCircle, FiShield, FiBarChart } from "react-icons/fi";
 import useaxiosPublic from "../../hooks/useAxiosPublic";
+import useAOS from "../../hooks/useAOS";
+import { pageAnimations } from "../../utils/aosAnimations";
 
 const AddAsset = () => {
   const axiosURL = useaxiosPublic();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const { register, reset, handleSubmit } = useForm();
+  const image = import.meta.env.VITE_IMGBB_KEY;
+
+  // Initialize AOS
+  useAOS();
 
   const handleAsset = async (data) => {
     setLoading(true);
@@ -23,17 +29,17 @@ const AddAsset = () => {
       formData.append("image", imageFile);
 
       const imageBB = await axios.post(
-        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`,
+        `https://api.imgbb.com/1/upload?key=${image}`,
         formData
       );
 
       const newAsset = {
-        productName: data.assetName,
+        productName: data.name,
         productImage: imageBB.data.data.url,
-        productType: data.assetType,
+        productType: data.type,
         productQuantity: Number(data.quantity),
         availableQuantity: Number(data.quantity),
-        hrEmail: user.email,
+        hrEmail: user?.email,
         companyName: companyName,
       };
 
@@ -61,17 +67,43 @@ const AddAsset = () => {
 
   return (
     <div className="min-h-screen bg-base-200 py-10 px-4 flex justify-center items-center">
-      <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-3xl overflow-hidden border border-gray-200/50">
+      <div
+        className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-3xl overflow-hidden border border-gray-200/50"
+        data-aos="fade-up"
+        data-aos-duration="800"
+      >
         {/* Left Side: Information & Benefits (Hidden on mobile) */}
-        <div className="hidden lg:flex bg-primary p-12 flex-col justify-between text-white">
+        <div
+          className="hidden lg:flex bg-primary p-12 flex-col justify-between text-white"
+          data-aos="fade-right"
+          data-aos-duration="800"
+          data-aos-delay="200"
+        >
           <div>
-            <h1 className="text-4xl font-bold mb-4 arimo italic">AssetVerse</h1>
-            <p className="text-blue-100 text-lg mb-8">
+            <h1
+              className="text-4xl font-bold mb-4 arimo italic"
+              data-aos="fade-down"
+              data-aos-duration="600"
+              data-aos-delay="400"
+            >
+              AssetVerse
+            </h1>
+            <p
+              className="text-blue-100 text-lg mb-8"
+              data-aos="fade-up"
+              data-aos-duration="600"
+              data-aos-delay="500"
+            >
               Empower your HR operations with seamless inventory management.
             </p>
 
             <div className="space-y-6">
-              <div className="flex items-start gap-4">
+              <div
+                className="flex items-start gap-4"
+                data-aos="fade-right"
+                data-aos-duration="600"
+                data-aos-delay="600"
+              >
                 <div className="bg-white/20 p-2 rounded-lg">
                   <FiShield size={24} />
                 </div>
@@ -82,7 +114,12 @@ const AddAsset = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex items-start gap-4">
+              <div
+                className="flex items-start gap-4"
+                data-aos="fade-right"
+                data-aos-duration="600"
+                data-aos-delay="700"
+              >
                 <div className="bg-white/20 p-2 rounded-lg">
                   <FiBarChart size={24} />
                 </div>
@@ -94,7 +131,12 @@ const AddAsset = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex items-start gap-4">
+              <div
+                className="flex items-start gap-4"
+                data-aos="fade-right"
+                data-aos-duration="600"
+                data-aos-delay="800"
+              >
                 <div className="bg-white/20 p-2 rounded-lg">
                   <FiCheckCircle size={24} />
                 </div>
@@ -108,41 +150,63 @@ const AddAsset = () => {
             </div>
           </div>
 
-          <div className="text-xs text-blue-200">
+          <div
+            className="text-xs text-blue-200"
+            data-aos="fade-up"
+            data-aos-duration="400"
+            data-aos-delay="900"
+          >
             © 2024 AssetVerse Management System. All rights reserved.
           </div>
         </div>
 
         {/* Right Side: The Form */}
-        <div className="bg-base-100 p-8 md:p-12">
-          <div className="mb-4">
+        <div
+          className="bg-base-100 p-8 md:p-12"
+          data-aos="fade-left"
+          data-aos-duration="800"
+          data-aos-delay="300"
+        >
+          <div
+            className="mb-4"
+            data-aos="fade-down"
+            data-aos-duration="600"
+            data-aos-delay="500"
+          >
             <h2 className="text-3xl font-bold text-neutral">Add New Asset</h2>
             <p className="text-secondary mt-1">
               Please fill in the details below to list a new item.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(handleAsset)} className="space-y-5">
+          <form
+            onSubmit={handleSubmit(handleAsset)}
+            className="space-y-5"
+            {...pageAnimations.form.container}
+          >
             <fieldset className="fieldset">
-              <div>
+              <div {...pageAnimations.form.field(0)}>
                 <label className="label text-neutral font-medium">
                   Asset Name
                 </label>
                 <input
-                  {...register("assetName", { required: true })}
+                  {...register("name", { required: true })}
                   type="text"
                   placeholder="E e.g. Dell Latitude 5420"
                   className="input w-full pl-5 bg-base-200 border-base-300 focus:border-primary focus-within:outline-0"
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                {...pageAnimations.form.field(1)}
+              >
                 <div className="">
                   <label className="label text-neutral font-medium">
                     Asset Type
                   </label>
                   <select
-                    {...register("assetType", { required: true })}
+                    {...register("type", { required: true })}
                     className="select w-full pl-5 bg-base-200 border-base-300 focus:border-primary focus-within:outline-0"
                     defaultValue=""
                   >
@@ -168,7 +232,7 @@ const AddAsset = () => {
                 </div>
               </div>
 
-              <div>
+              <div {...pageAnimations.form.field(2)}>
                 <label className="label text-neutral font-medium">
                   Asset Image
                 </label>
@@ -179,7 +243,7 @@ const AddAsset = () => {
                 </div>
               </div>
 
-              <div className="pt-4">
+              <div className="pt-4" {...pageAnimations.form.button}>
                 <button
                   disabled={loading}
                   className="btn btn-primary w-full h-14 text-white text-lg font-bold shadow-lg"

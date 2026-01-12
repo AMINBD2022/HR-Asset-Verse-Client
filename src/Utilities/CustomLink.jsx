@@ -1,6 +1,4 @@
-import React from "react";
 import { NavLink } from "react-router";
-
 const CustomLink = ({ link }) => {
   return (
     <NavLink

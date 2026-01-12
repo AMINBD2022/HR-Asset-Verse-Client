@@ -8,17 +8,9 @@ import useRole from "../hooks/useRole";
 import CustomLink from "../Utilities/CustomLink";
 
 const Header = () => {
-  const { user, logOutUser, isLoading } = useAuth();
+  const { user, logOutUser, loading } = useAuth();
   const { role, roleLoading } = useRole();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // // Public links - Show when not logged in
-  // const publicLinks = [
-  //   { label: "Home", href: "/" },
-  //   { label: "Blog", href: "/blog" },
-  //   { label: "Join as Employee", href: "/register" },
-  //   { label: "Join HR Manager", href: "/register" },
-  // ];
 
   // Employee menu - Only for employees
   const employeeMenu = [
@@ -39,16 +31,12 @@ const Header = () => {
   // Dashboard menu items for HR users
   const dashboardMenu = [
     { label: "Dashboard", href: "/dashboard" },
-    // { label: "Asset Requests", href: "/dashboard/asset-requests" },
-    // { label: "Approvals", href: "/dashboard/approvals" },
     { label: "Profile", href: "/dashboard/profile" },
   ];
 
   // Employee dashboard menu items for employee users
   const employeeDashboardMenu = [
     { label: "Dashboard", href: "/employee-dashboard" },
-    // { label: "My Requests", href: "/employee-dashboard/requests" },
-    // { label: "Approved Assets", href: "/employee-dashboard/approved-assets" },
     { label: "Profile", href: "/employee-dashboard/profile" },
   ];
 
@@ -80,40 +68,39 @@ const Header = () => {
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
-
-  // Get center navigation menu based on user role
   const getCenterNavMenu = () => {
-    // Always show Home and Blog for everyone
     const publicItems = [
       { label: "Home", href: "/" },
-      { label: "Blog", href: "/blog" },
+      { label: "Blogs", href: "/blogs" },
     ];
 
     if (!user) {
-      // Show public links when not logged in
-      return [
-        ...publicItems,
-        // { label: "Join as Employee", href: "/register" },
-        { label: "Register", href: "/register" },
-      ];
+      return [...publicItems, { label: "Register", href: "/register" }];
     }
 
-    // When logged in, show Home + Blog + role-specific items
+    if (roleLoading) {
+      return publicItems;
+    }
+
     if (role === "employee") {
       return [...publicItems, ...employeeMenu];
     } else if (role === "Hr" || role === "hr") {
       return [...publicItems, ...hrMenu];
     }
 
-    // Fallback - show public links if role is not determined yet
+    // Fallback - show public links if role is not determined
     return publicItems;
   };
 
   const centerNavMenu = getCenterNavMenu();
 
-  if (isLoading || roleLoading) {
+  if (loading) {
     return (
-      <header className="sticky top-0 z-50 bg-base-300 shadow-lg border-b border-base-200">
+      <header
+        className="sticky top-0 z-50 bg-base-300 shadow-lg border-b border-base-200"
+        data-aos="slide-down"
+        data-aos-duration="600"
+      >
         <div className="navbar h-16 max-w-7xl mx-auto px-4 lg:px-6">
           <div className="navbar-start">
             <Logo />
@@ -164,11 +151,7 @@ const Header = () => {
         {/* Right side - Login button or User profile */}
         <div className="navbar-end">
           {!user ? (
-            <NavLink
-              to="/login"
-              className="custom-button"
-              aria-label="Login to your account"
-            >
+            <NavLink to="/login" className="custom-button">
               Login
             </NavLink>
           ) : (
@@ -177,7 +160,6 @@ const Header = () => {
                 tabIndex={0}
                 role="button"
                 className="btn btn-ghost btn-circle avatar hover:bg-base-200 transition-colors"
-                aria-label="User profile menu"
               >
                 <div className="w-10 rounded-full ring-2 ring-primary ring-offset-2 ring-offset-base-300">
                   <img
@@ -203,6 +185,7 @@ const Header = () => {
                       {user.displayName || user.email || "User"}
                     </span>
                   </div>
+                  <span>{role || "ghost"}</span>
                 </span>
                 <div className="divider my-1"></div>
 
@@ -249,31 +232,6 @@ const Header = () => {
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-base-100 border-t border-base-200 shadow-lg">
           <div className="px-4 py-4 max-w-7xl mx-auto">
-            {/* Mobile User Info - Only show if user is logged in */}
-            {/* {user && (
-              <div className="flex items-center gap-3 mb-4 pb-4 border-b border-base-200">
-                <div className="avatar">
-                  <div className="w-12 rounded-full ring-2 ring-primary">
-                    <img
-                      src={
-                        user.photoURL || "https://i.ibb.co.com/bMr460hd/ss.avif"
-                      }
-                      alt="User profile"
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-neutral truncate">
-                    {user.displayName || user.email || "User"}
-                  </p>
-                  <p className="text-sm text-secondary capitalize">
-                    {role || "Loading..."}
-                  </p>
-                </div>
-              </div>
-            )} */}
-
             {/* Mobile Navigation Links */}
             <nav>
               <ul className="menu menu-sm gap-1">
@@ -286,38 +244,6 @@ const Header = () => {
                 ))}
               </ul>
             </nav>
-
-            {/* Mobile Dashboard Section - Only for HR users */}
-            {/* {user && (role === "Hr" || role === "hr") && (
-              <>
-                <div className="divider my-4"></div>
-                <h3 className="font-semibold text-neutral mb-3">Dashboard</h3>
-                <nav>
-                  <ul className="menu menu-sm gap-1">
-                    {dashboardMenu.map((item) => (
-                      <li key={item.href}>
-                        <div onClick={closeMobileMenu}>
-                          <CustomLink link={item} />
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-              </>
-            )} */}
-
-            {/* Mobile Logout Button - Only show if user is logged in */}
-            {/* {user && (
-              <div className="mt-4 pt-4 border-t border-base-200">
-                <button
-                  onClick={handleLogOut}
-                  className="btn btn-secondary btn-sm w-full flex items-center justify-center gap-2"
-                >
-                  <IoMdLogOut className="h-4 w-4" />
-                  Log Out
-                </button>
-              </div>
-            )} */}
           </div>
         </div>
       )}

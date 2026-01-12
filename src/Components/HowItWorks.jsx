@@ -6,8 +6,12 @@ import {
 } from "react-icons/fa";
 import Title from "../Utilities/Title";
 import SubTitle from "../Utilities/SubTitle";
+import useAOS from "../hooks/useAOS";
 
 const HowItWorks = () => {
+  // Initialize AOS
+  useAOS();
+
   const steps = [
     {
       icon: <FaUserPlus className="text-4xl text-primary" />,
@@ -35,10 +39,13 @@ const HowItWorks = () => {
     <section className="py-16 bg-base-100">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center">
+        <div
+          className="text-center"
+          data-aos="fade-down"
+          data-aos-duration="800"
+        >
           <Title normal={"How It Works"} />
           <SubTitle>
-            {" "}
             Simple steps to manage company assets efficiently and transparently.
           </SubTitle>
         </div>
@@ -49,11 +56,35 @@ const HowItWorks = () => {
             <div
               key={index}
               className="card bg-base-200 shadow-md hover:shadow-xl transition"
+              data-aos="fade-up"
+              data-aos-duration="800"
+              data-aos-delay={`${index * 150}`}
             >
               <div className="card-body text-center">
-                <div className="flex justify-center mb-4">{step.icon}</div>
-                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                <p className="text-gray-600 text-sm">{step.desc}</p>
+                <div
+                  className="flex justify-center mb-4"
+                  data-aos="zoom-in"
+                  data-aos-duration="600"
+                  data-aos-delay={`${200 + index * 150}`}
+                >
+                  {step.icon}
+                </div>
+                <h3
+                  className="text-xl font-semibold mb-2"
+                  data-aos="fade-up"
+                  data-aos-duration="600"
+                  data-aos-delay={`${300 + index * 150}`}
+                >
+                  {step.title}
+                </h3>
+                <p
+                  className="text-gray-600 text-sm"
+                  data-aos="fade-up"
+                  data-aos-duration="600"
+                  data-aos-delay={`${400 + index * 150}`}
+                >
+                  {step.desc}
+                </p>
               </div>
             </div>
           ))}

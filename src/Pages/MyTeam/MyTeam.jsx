@@ -80,7 +80,7 @@ const MyTeam = () => {
               className="card bg-base-100 shadow-sm border border-secondary/50"
             >
               <div className="card-body items-center text-center">
-                <div className="avatar mb-3 w-20 h-20 ">
+                <div className="avatar mb-3 w-20 h-20">
                   <img
                     className="rounded-full border border-secondary"
                     src={
@@ -91,9 +91,13 @@ const MyTeam = () => {
                   />
                 </div>
                 <h2 className="font-bold text-lg text-accent">
-                  {member.employeeName.length > 9
-                    ? `${member.employeeName?.slice(0, 9)}...`
-                    : member.employeeName}
+                  {member.employeeEmail === user.email
+                    ? "You"
+                    : `${
+                        member.employeeName.length > 9
+                          ? `${member.employeeName?.slice(0, 9)}...`
+                          : member.employeeName
+                      }`}
                 </h2>
                 <p className="text-sm text-gray-500">{member.employeeEmail}</p>
                 <div className="badge badge-outline mt-2">
@@ -101,7 +105,8 @@ const MyTeam = () => {
                 </div>
 
                 <p className="text-xs text-gray-400 mt-2">
-                  Joined: {member.affiliationDate}
+                  Joined :{" "}
+                  {new Date(member.affiliationDate).toLocaleDateString()}
                 </p>
               </div>
             </div>

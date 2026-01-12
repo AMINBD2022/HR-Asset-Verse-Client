@@ -3,11 +3,17 @@ import { Link } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import useRole from "../../../hooks/useRole";
 import useaxiosPublic from "../../../hooks/useAxiosPublic";
+import useAOS from "../../../hooks/useAOS";
+import { pageAnimations } from "../../../utils/aosAnimations";
 
 const Dashboard = () => {
   const { user } = useAuth();
   const { role } = useRole();
   const axiosPublic = useaxiosPublic();
+
+  // Initialize AOS
+  useAOS();
+
   const [dashboardData, setDashboardData] = useState({
     totalAssets: 0,
     totalRequests: 0,
@@ -162,7 +168,11 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-96">
+      <div
+        className="flex items-center justify-center min-h-96"
+        data-aos="fade-in"
+        data-aos-duration="600"
+      >
         <div className="loading loading-spinner loading-lg text-primary"></div>
       </div>
     );
@@ -171,7 +181,7 @@ const Dashboard = () => {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
+      <div {...pageAnimations.dashboard.header}>
         <h1 className="text-3xl font-bold text-neutral">Dashboard Overview</h1>
         <p className="text-secondary mt-2">
           Welcome back, {user?.displayName || user?.email}
@@ -181,7 +191,10 @@ const Dashboard = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300 hover:shadow-md transition-shadow">
+        <div
+          className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300 hover:shadow-md transition-shadow"
+          {...pageAnimations.dashboard.card(0)}
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-secondary text-sm font-medium">Total Assets</p>
@@ -208,7 +221,10 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300 hover:shadow-md transition-shadow">
+        <div
+          className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300 hover:shadow-md transition-shadow"
+          {...pageAnimations.dashboard.card(1)}
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-secondary text-sm font-medium">
@@ -237,7 +253,10 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300 hover:shadow-md transition-shadow">
+        <div
+          className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300 hover:shadow-md transition-shadow"
+          {...pageAnimations.dashboard.card(2)}
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-secondary text-sm font-medium">
@@ -270,7 +289,10 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300 hover:shadow-md transition-shadow">
+        <div
+          className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300 hover:shadow-md transition-shadow"
+          {...pageAnimations.dashboard.card(3)}
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-secondary text-sm font-medium">
@@ -303,7 +325,10 @@ const Dashboard = () => {
       {/* Charts Section - Pure CSS Implementation */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Monthly Requests Bar Chart */}
-        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+        <div
+          className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300"
+          {...pageAnimations.dashboard.chart}
+        >
           <h3 className="text-xl font-semibold text-neutral mb-6">
             Monthly Asset Requests (Last 6 Months)
           </h3>
@@ -380,7 +405,12 @@ const Dashboard = () => {
         </div>
 
         {/* Approval Status Pie Chart */}
-        <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+        <div
+          className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300"
+          data-aos="fade-left"
+          data-aos-duration="800"
+          data-aos-delay="400"
+        >
           <h3 className="text-xl font-semibold text-neutral mb-6">
             Request Status Distribution
           </h3>
@@ -471,7 +501,12 @@ const Dashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300">
+      <div
+        className="bg-base-100 rounded-xl p-6 shadow-sm border border-base-300"
+        data-aos="fade-up"
+        data-aos-duration="800"
+        data-aos-delay="600"
+      >
         <h3 className="text-xl font-semibold text-neutral mb-6">
           Quick Actions
         </h3>
@@ -479,6 +514,9 @@ const Dashboard = () => {
           <Link
             to="/dashboard/asset-requests"
             className="btn btn-primary btn-lg flex items-center gap-3 h-16"
+            data-aos="zoom-in"
+            data-aos-duration="600"
+            data-aos-delay="700"
           >
             <svg
               className="w-6 h-6"
@@ -498,6 +536,9 @@ const Dashboard = () => {
           <Link
             to="/dashboard/approvals"
             className="btn btn-success btn-lg flex items-center gap-3 h-16"
+            data-aos="zoom-in"
+            data-aos-duration="600"
+            data-aos-delay="800"
           >
             <svg
               className="w-6 h-6"
@@ -517,6 +558,9 @@ const Dashboard = () => {
           <Link
             to="/add-asset"
             className="btn btn-info btn-lg flex items-center gap-3 h-16"
+            data-aos="zoom-in"
+            data-aos-duration="600"
+            data-aos-delay="900"
           >
             <svg
               className="w-6 h-6"
